@@ -1,0 +1,402 @@
+{
+  "info": {
+    "name": "Express TypeScript API",
+    "description": "Complete API collection for the Express TypeScript application with user management endpoints",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "apiVersion",
+      "value": "v1",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "item": [
+    {
+      "name": "General",
+      "item": [
+        {
+          "name": "Welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Returns welcome information and API status"
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Returns the health status of the API and server information"
+          },
+          "response": []
+        }
+      ],
+      "description": "General API endpoints for system information and health monitoring"
+    },
+    {
+      "name": "API Information",
+      "item": [
+        {
+          "name": "Get API Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "{{apiVersion}}", ""]
+            },
+            "description": "Returns information about the API and available endpoints"
+          },
+          "response": []
+        }
+      ],
+      "description": "API information and metadata endpoints"
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "{{apiVersion}}", "users"]
+            },
+            "description": "Retrieves a list of all users in the system"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "{{apiVersion}}", "users", "1"]
+            },
+            "description": "Retrieves a specific user by their unique identifier"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice Johnson\",\n  \"email\": \"alice@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "{{apiVersion}}", "users"]
+            },
+            "description": "Creates a new user in the system"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe Updated\",\n  \"email\": \"john.updated@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "{{apiVersion}}", "users", "1"]
+            },
+            "description": "Updates an existing user's information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/users/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "{{apiVersion}}", "users", "1"]
+            },
+            "description": "Removes a user from the system"
+          },
+          "response": []
+        }
+      ],
+      "description": "User management endpoints for CRUD operations"
+    },
+    {
+      "name": "Testing Scenarios",
+      "item": [
+        {
+          "name": "Complete User CRUD Flow",
+          "item": [
+            {
+              "name": "1. Create User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/{{apiVersion}}/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "{{apiVersion}}", "users"]
+                },
+                "description": "Step 1: Create a new user for testing"
+              },
+              "response": []
+            },
+            {
+              "name": "2. Get All Users",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/{{apiVersion}}/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "{{apiVersion}}", "users"]
+                },
+                "description": "Step 2: Verify user was created"
+              },
+              "response": []
+            },
+            {
+              "name": "3. Get Specific User",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/{{apiVersion}}/users/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "{{apiVersion}}", "users", "1"]
+                },
+                "description": "Step 3: Get the created user by ID"
+              },
+              "response": []
+            },
+            {
+              "name": "4. Update User",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Test User\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/{{apiVersion}}/users/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "{{apiVersion}}", "users", "1"]
+                },
+                "description": "Step 4: Update the user's name"
+              },
+              "response": []
+            },
+            {
+              "name": "5. Delete User",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/{{apiVersion}}/users/1",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "{{apiVersion}}", "users", "1"]
+                },
+                "description": "Step 5: Clean up by deleting the test user"
+              },
+              "response": []
+            }
+          ],
+          "description": "Complete workflow to test all user operations"
+        },
+        {
+          "name": "Error Testing",
+          "item": [
+            {
+              "name": "Invalid Email Format",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"invalid-email\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/{{apiVersion}}/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "{{apiVersion}}", "users"]
+                },
+                "description": "Test validation error for invalid email format"
+              },
+              "response": []
+            },
+            {
+              "name": "Missing Required Fields",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test User\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/{{apiVersion}}/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "{{apiVersion}}", "users"]
+                },
+                "description": "Test validation error for missing email field"
+              },
+              "response": []
+            },
+            {
+              "name": "Non-existent User",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/{{apiVersion}}/users/999",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "{{apiVersion}}", "users", "999"]
+                },
+                "description": "Test 404 error for non-existent user"
+              },
+              "response": []
+            }
+          ],
+          "description": "Test various error scenarios and edge cases"
+        }
+      ],
+      "description": "Predefined testing scenarios for comprehensive API testing"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script to set common headers or variables",
+          "console.log('Making request to: ' + pm.request.url);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Test script to validate responses",
+          "pm.test('Status code is 200', function () {",
+          "    pm.response.to.have.status(200);",
+          "});",
+          "",
+          "pm.test('Response time is less than 1000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+          "});",
+          "",
+          "pm.test('Response has required fields', function () {",
+          "    const jsonData = pm.response.json();",
+          "    pm.expect(jsonData).to.have.property('message');",
+          "});"
+        ]
+      }
+    }
+  ]
+} 
