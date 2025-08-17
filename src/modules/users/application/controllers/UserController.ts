@@ -6,6 +6,7 @@ export class UserController {
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
+      req
       const users = await this.userService.getAllUsers();
       res.json({
         message: 'Get all users',

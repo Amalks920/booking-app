@@ -6,6 +6,8 @@ export class RoleController {
 
   async getAllRoles(req: Request, res: Response): Promise<void> {
     try {
+      console.log(req)
+
       const roles = await this.roleService.getAllRoles();
       
       res.status(200).json({

@@ -7,6 +7,8 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ): void => {
+  next
+  req
   console.error('Error:', err);
 
   // Handle operational errors

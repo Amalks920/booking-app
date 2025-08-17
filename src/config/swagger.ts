@@ -294,6 +294,69 @@ const options: swaggerJsdoc.Options = {
             }
           }
         },
+        Property: {
+          type: 'object',
+          required: ['id', 'property_name', 'address', 'city', 'state', 'country', 'status', 'created_by', 'updated_by'],
+          properties: {
+            id: { type: 'integer', description: 'Unique identifier for the property' },
+            property_name: { type: 'string', description: 'Name of the property' },
+            description: { type: 'string', description: 'Property description' },
+            type: { type: 'string', description: 'Type of property (e.g., hotel, apartment)' },
+            address: { type: 'string', description: 'Street address of the property' },
+            city: { type: 'string', description: 'City' },
+            state: { type: 'string', description: 'State' },
+            country: { type: 'string', description: 'Country' },
+            pincode: { type: 'string', description: 'Postal code' },
+            latitude: { type: 'number', format: 'float', description: 'Latitude coordinate' },
+            longitude: { type: 'number', format: 'float', description: 'Longitude coordinate' },
+            contact_number: { type: 'string', description: 'Contact phone number' },
+            status: { type: 'string', enum: ['active', 'inactive'], description: 'Current status of the property' },
+            created_by: { type: 'integer', description: 'User ID who created the property' },
+            updated_by: { type: 'integer', description: 'User ID who last updated the property' },
+            created_at: { type: 'string', format: 'date-time', description: 'Creation timestamp' },
+            updated_at: { type: 'string', format: 'date-time', description: 'Last update timestamp' }
+          }
+        },
+        
+        CreatePropertyRequest: {
+          type: 'object',
+          required: ['property_name', 'address', 'city', 'state', 'country', 'created_by', 'updated_by'],
+          properties: {
+            property_name: { type: 'string', description: 'Name of the property' },
+            description: { type: 'string', description: 'Property description' },
+            type: { type: 'string', description: 'Type of property' },
+            address: { type: 'string', description: 'Street address' },
+            city: { type: 'string', description: 'City' },
+            state: { type: 'string', description: 'State' },
+            country: { type: 'string', description: 'Country' },
+            pincode: { type: 'string', description: 'Postal code' },
+            latitude: { type: 'number', format: 'float', description: 'Latitude coordinate' },
+            longitude: { type: 'number', format: 'float', description: 'Longitude coordinate' },
+            contact_number: { type: 'string', description: 'Contact number' },
+            status: { type: 'string', enum: ['active', 'inactive'], description: 'Property status' },
+            created_by: { type: 'integer', description: 'Creator user ID' },
+            updated_by: { type: 'integer', description: 'Updater user ID' }
+          }
+        },
+        
+        UpdatePropertyRequest: {
+          type: 'object',
+          properties: {
+            property_name: { type: 'string', description: 'Name of the property' },
+            description: { type: 'string', description: 'Property description' },
+            type: { type: 'string', description: 'Type of property' },
+            address: { type: 'string', description: 'Street address' },
+            city: { type: 'string', description: 'City' },
+            state: { type: 'string', description: 'State' },
+            country: { type: 'string', description: 'Country' },
+            pincode: { type: 'string', description: 'Postal code' },
+            latitude: { type: 'number', format: 'float', description: 'Latitude coordinate' },
+            longitude: { type: 'number', format: 'float', description: 'Longitude coordinate' },
+            contact_number: { type: 'string', description: 'Contact number' },
+            status: { type: 'string', enum: ['active', 'inactive'], description: 'Property status' },
+            updated_by: { type: 'integer', description: 'Updater user ID' }
+          }
+        },
         Error: {
           type: 'object',
           properties: {

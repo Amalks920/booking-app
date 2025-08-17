@@ -7,6 +7,7 @@ export class RoleRepositoryImpl implements RoleRepository {
   }
 
   async findById(id: number): Promise<Role | null> {
+    console.log(id)
     // TODO: Implement database query
     return null;
   }
@@ -26,11 +27,14 @@ export class RoleRepositoryImpl implements RoleRepository {
   }
 
   async update(id: number, roleData: UpdateRoleDto): Promise<Role | null> {
+    id
+    roleData
     // TODO: Implement database query
     return null;
   }
 
   async delete(id: number): Promise<boolean> {
+    id
     // TODO: Implement database query
     return false;
   }

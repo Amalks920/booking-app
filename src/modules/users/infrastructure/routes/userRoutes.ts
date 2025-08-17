@@ -185,6 +185,7 @@ const userController = new UserController(userService);
  *                 details: []
  *               timestamp: "2025-01-15T12:00:00.000Z"
  */
+
 router.get('/', (req, res) => userController.getAllUsers(req, res));
 
 /**
@@ -728,3 +729,11 @@ router.put('/:id', (req, res) => userController.updateUser(req, res));
 router.delete('/:id', (req, res) => userController.deleteUser(req, res));
 
 export default router; 
+
+
+
+
+
+
+
+
