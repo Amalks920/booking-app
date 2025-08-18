@@ -1,4 +1,4 @@
-import { Role, CreateRoleDto, UpdateRoleDto, RoleRepository } from '../entities/Role';
+import { Role, CreateRoleDto, UpdateRoleDto, RoleRepository } from '../../../users/domain/entities/Role';
 
 export class RoleService {
   constructor(private roleRepository: RoleRepository) {}
