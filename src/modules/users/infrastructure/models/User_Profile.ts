@@ -39,7 +39,11 @@ export class UserProfile
   public readonly updatedAt!: Date;
 }
 
-// Initialize the model
+UserProfile.belongsTo(User, {
+  foreignKey: 'user_id',
+  as: 'user'
+});
+
 UserProfile.init(
   {
     id: {
