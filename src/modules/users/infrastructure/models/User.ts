@@ -1,6 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../../../../config/database';
-import Role from './Role';
 
 // Interface for User attributes
 export interface UserAttributes {
@@ -22,11 +21,6 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
-
-User.belongsTo(Role, {
-  foreignKey: 'role_id',   // user table will have role_id
-  as: 'role'
-});
 
 // Initialize the User model
 User.init(

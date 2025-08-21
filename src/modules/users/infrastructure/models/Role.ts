@@ -1,6 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../../../config/database';
-import User from './User';
 
 export interface RoleAttributes {
   id: number;
@@ -28,11 +27,6 @@ export class Role extends Model<RoleAttributes, RoleCreationAttributes> implemen
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
-
-Role.hasMany(User, {
-  foreignKey: 'role_id',
-  as: 'users'
-});
 
 // Initialize the Role model
 Role.init(
