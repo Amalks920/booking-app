@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import routes from './routes';
 import { specs } from './config/swagger';
 import { errorHandler } from './shared/middleware/errorHandler';
+import sequelize from './config/database'; // Import your Sequelize instance
 
 // Load environment variables
 dotenv.config();
@@ -14,6 +15,30 @@ dotenv.config();
 // Create Express app
 const app: Application = express();
 const PORT = process.env['PORT'] || 3000;
+
+// Database connection function
+async function initializeDatabase(): Promise<boolean> {
+  try {
+    console.log('🔄 Connecting to database...');
+    await sequelize.authenticate();
+    console.log('✅ Database connection established successfully');
+    
+    // Sync database models (be careful in production)
+    if (process.env['NODE_ENV'] === 'development') {
+      await sequelize.sync({ alter: true });
+      console.log('✅ Database models synchronized');
+    } else {
+      // In production, just check if we can connect
+      await sequelize.sync({ alter: false });
+      console.log('✅ Database models verified');
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('❌ Unable to connect to the database:', error);
+    return false;
+  }
+}
 
 // Middleware
 app.use(helmet()); // Security headers
@@ -89,12 +114,25 @@ app.get('/', (_req: Request, res: Response) => {
  *                 timestamp:
  *                   type: string
  *                   format: date-time
+ *                 database:
+ *                   type: string
+ *                   example: "connected"
  */
-app.get('/health', (_req: Request, res: Response) => {
+app.get('/health', async (_req: Request, res: Response) => {
+  let dbStatus = 'disconnected';
+  
+  try {
+    await sequelize.authenticate();
+    dbStatus = 'connected';
+  } catch (error) {
+    dbStatus = 'disconnected';
+  }
+  
   res.json({
     status: 'healthy',
     uptime: process.uptime(),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    database: dbStatus
   });
 });
 
@@ -112,12 +150,59 @@ app.use('*', (req: Request, res: Response) => {
 // Global error handler
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📱 Environment: ${process.env['NODE_ENV'] || 'development'}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-  console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
+// Application startup function
+async function startApplication(): Promise<void> {
+  try {
+    // Initialize database connection
+    const dbConnected = await initializeDatabase();
+    
+    if (!dbConnected) {
+      console.error('❌ Failed to connect to database. Exiting...');
+      process.exit(1);
+    }
+    
+    // Start the server
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
+      console.log(`📱 Environment: ${process.env['NODE_ENV'] || 'development'}`);
+      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+      console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
+    });
+    
+  } catch (error) {
+    console.error('❌ Failed to start application:', error);
+    process.exit(1);
+  }
+}
+
+// Graceful shutdown handler
+process.on('SIGINT', async () => {
+  console.log('\n🔄 Shutting down gracefully...');
+  
+  try {
+    await sequelize.close();
+    console.log('✅ Database connection closed');
+  } catch (error) {
+    console.error('❌ Error closing database connection:', error);
+  }
+  
+  process.exit(0);
 });
 
-export default app; 
+process.on('SIGTERM', async () => {
+  console.log('\n🔄 Received SIGTERM, shutting down gracefully...');
+  
+  try {
+    await sequelize.close();
+    console.log('✅ Database connection closed');
+  } catch (error) {
+    console.error('❌ Error closing database connection:', error);
+  }
+  
+  process.exit(0);
+});
+
+// Start the application
+startApplication();
+
+export default app;
