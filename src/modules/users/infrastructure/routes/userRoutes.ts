@@ -2,12 +2,14 @@ import { Router } from 'express';
 import { UserController } from '../../application/controllers/UserController';
 import { UserService } from '../../domain/services/UserService';
 import { UserRepositoryImpl } from '../repositories/UserRepositoryImpl';
+import { CognitoService } from '../../../authentication/domain/services/CognitoService';
 
 const router = Router();
 
 // Dependency injection
 const userRepository = new UserRepositoryImpl();
-const userService = new UserService(userRepository);
+const cognitoService = new CognitoService();
+const userService = new UserService(userRepository, cognitoService);
 const userController = new UserController(userService);
 
 /**
@@ -306,9 +308,10 @@ router.get('/', (req, res) => userController.getAllUsers(req, res));
  */
 router.get('/:id', (req, res) => userController.getUserById(req, res));
 //'name', 'email','password','role_id','first_name','last_name','country_code','phone_number'
+
 /**
  * @swagger
- * /api/v1/users:
+ * /api/v1/users/create:
  *   post:
  *     summary: Create a new user
  *     description: |
@@ -440,7 +443,7 @@ router.get('/:id', (req, res) => userController.getUserById(req, res));
  *                 details: []
  *               timestamp: "2025-01-15T12:00:00.000Z"
  */
-router.post('/', (req, res) => userController.createUser(req, res));
+router.post('/create', (req, res) => userController.createUser(req, res));
 
 /**
  * @swagger

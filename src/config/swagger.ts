@@ -84,6 +84,62 @@ const options: swaggerJsdoc.Options = {
             }
           }
         },
+        Auth:{
+          type: 'object',
+          required: ['id', 'name', 'email', 'first_name', 'last_name', 'country_code', 'phone_number', 'role'],
+          properties: {
+            id: {
+              type: 'integer',
+              description: 'Unique identifier for the user'
+            },
+            name: {
+              type: 'string',
+              description: 'Full name of the user'
+            },
+            email: {
+              type: 'string',
+              format: 'email',
+              description: 'Email address of the user'
+            },
+            first_name: {
+              type: 'string',
+              description: 'First name of the user'
+            },
+            last_name: {
+              type: 'string',
+              description: 'Last name of the user'
+            },
+            country_code: {
+              type: 'string',
+              description: 'Country code (e.g., +1, +44)'
+            },
+            phone_number: {
+              type: 'string',
+              description: 'Phone number of the user'
+            },
+            role: {
+              type: 'string',
+              format: 'uuid',
+              description: 'UUID of the role assigned to the user'
+            },
+            status: {
+              type: 'string',
+              enum: ['active', 'inactive', 'suspended'],
+              description: 'Current status of the user account',
+              example: 'active'
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Timestamp when the user was created'
+            },
+            updatedAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Timestamp when the user was last updated'
+            }
+          }
+        },
         CreateUserRequest: {
           type: 'object',
           required: ['name', 'email','password','role','first_name','last_name','country_code','phone_number'],
@@ -426,6 +482,10 @@ const options: swaggerJsdoc.Options = {
       {
         name: 'Users',
         description: 'User management endpoints'
+      },
+      {
+        name: 'Auth',
+        description: 'Auth management endpoints'
       },
       {
         name: 'Roles',

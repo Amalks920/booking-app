@@ -54,26 +54,66 @@ export class UserController {
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email } = req.body;
-      const user = await this.userService.createUser({ name, email });
+      const { name, email, password, phone_number, country_code } = req.body;
+      
+      // Build phoneNumber from country_code and phone_number if both are provided
+      const phoneNumber = country_code && phone_number ? `${country_code}${phone_number}` : phone_number;
+      
+      const user = await this.userService.createUser({ 
+        name, 
+        email, 
+        password,
+        phoneNumber
+      });
       
       res.status(201).json({
+        success: true,
         message: 'User created successfully',
-        user
+        data: user,
+        timestamp: new Date().toISOString()
       });
     } catch (error) {
       if (error instanceof Error && error.message.includes('required')) {
-        res.status(400).json({ error: 'Validation error', message: error.message });
+        res.status(400).json({ 
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
         return;
       }
       if (error instanceof Error && error.message.includes('Invalid email')) {
-        res.status(400).json({ error: 'Validation error', message: error.message });
+        res.status(400).json({ 
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
+        return;
+      }
+      if (error instanceof Error && error.message.includes('Cognito')) {
+        res.status(500).json({ 
+          success: false,
+          error: {
+            code: 'COGNITO_ERROR',
+            message: error.message
+          },
+          timestamp: new Date().toISOString()
+        });
         return;
       }
       
       res.status(500).json({
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        success: false,
+        error: {
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error instanceof Error ? error.message : 'Unknown error'
+        },
+        timestamp: new Date().toISOString()
       });
     }
   }
