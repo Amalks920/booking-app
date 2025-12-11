@@ -7,7 +7,6 @@ const router = Router();
 // Mount module routes
 router.use('/users', userRoutes);
 router.use('/roles', roleRoutes);
-
 /**
  * @swagger
  * /api/v1:

@@ -180,6 +180,40 @@
       "description": "User management endpoints for CRUD operations"
     },
     {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Create User (Auth)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Amal KS\",\n  \"email\": \"amal@example.com\",\n  \"password\": \"Amal@123\",\n  \"role\": \"3dskjf48-4389-89ir-i949-123456789abc\",\n  \"first_name\": \"Amal\",\n  \"last_name\": \"KS\",\n  \"country_code\": \"+1\",\n  \"phone_number\": \"5551234567\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/auth/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "{{apiVersion}}", "auth", "create"]
+            },
+            "description": "Create a new user account through the authentication endpoint. This endpoint handles user registration with comprehensive validation.\n\n**Required Fields:**\n- name: Full name of the user\n- email: Valid email address (must be unique)\n- password: Password meeting security requirements (min 8 chars, uppercase, lowercase, number, special char)\n- role: UUID of an existing role\n- first_name: User's first name\n- last_name: User's last name\n- country_code: Country code (e.g., +1, +44)\n- phone_number: Valid phone number for the specified country\n\n**Note:** The Swagger documentation mentions bearerAuth, but the route may not require authentication depending on your implementation."
+          },
+          "response": []
+        }
+      ],
+      "description": "Authentication endpoints for user registration and account management"
+    },
+    {
       "name": "Testing Scenarios",
       "item": [
         {
