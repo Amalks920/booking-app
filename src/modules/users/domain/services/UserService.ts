@@ -1,5 +1,5 @@
 import { User, CreateUserDto, UpdateUserDto, UserRepository } from '../entities/User';
-import { CognitoService } from '../../../authentication/domain/services/CognitoService';
+import { CognitoService, SignInResponse } from '../../../authentication/domain/services/CognitoService';
 
 export class UserService {
   constructor(
@@ -80,6 +80,40 @@ export class UserService {
     }
 
     return this.userRepository.delete(id);
+  }
+
+  async signIn(usernameOrEmail: string, password: string): Promise<{ user: User; tokens: SignInResponse }> {
+    if (!usernameOrEmail || !password) {
+      throw new Error('Username/email and password are required');
+    }
+    
+    if (!this.cognitoService) {
+      throw new Error('CognitoService is not configured');
+    }
+
+    // Authenticate with Cognito
+    const tokens = await this.cognitoService.signIn(usernameOrEmail, password);
+
+    // Find user by email (username in Cognito is typically the email)
+    // Try to find by email first, if not found, try to find by username/name
+    let user = await this.userRepository.findByEmail(usernameOrEmail);
+    
+    // If not found by email, try to find by name (username)
+    if (!user) {
+      // Note: This assumes username could be the name field
+      // You might need to add a findByUsername method to the repository if needed
+      const allUsers = await this.userRepository.findAll();
+      user = allUsers.find(u => u.name === usernameOrEmail) || null;
+    }
+
+    if (!user) {
+      throw new Error('User not found in database');
+    }
+
+    return {
+      user,
+      tokens,
+    };
   }
 
   private isValidEmail(email: string): boolean {

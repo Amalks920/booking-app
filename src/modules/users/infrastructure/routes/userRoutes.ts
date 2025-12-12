@@ -447,6 +447,128 @@ router.post('/create', (req, res) => userController.createUser(req, res));
 
 /**
  * @swagger
+ * /api/v1/users/signin:
+ *   post:
+ *     summary: Sign in user
+ *     description: |
+ *       Authenticate a user with their email/username and password.
+ *       This endpoint validates credentials against AWS Cognito and returns
+ *       authentication tokens along with user information.
+ *       
+ *       **Authentication:**
+ *       - Supports both email and username for login
+ *       - Validates credentials against AWS Cognito User Pool
+ *       - Returns access token, ID token, and refresh token
+ *       - Tokens can be used for subsequent authenticated requests
+ *       
+ *       **Security:** This endpoint does not require authentication (public endpoint).
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: User's username (optional if email is provided)
+ *                 example: "amal"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address (optional if username is provided)
+ *                 example: "amal@example.com"
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: User's password
+ *                 example: "Amal@123"
+ *           example:
+ *             email: "amal@example.com"
+ *             password: "Amal@123"
+ *     responses:
+ *       200:
+ *         description: Sign in successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
+ *             example:
+ *               success: true
+ *               message: "Sign in successful"
+ *               data:
+ *                 user:
+ *                   id: 1
+ *                   name: "Amal KS"
+ *                   email: "amal@example.com"
+ *                   createdAt: "2025-01-15T10:30:00.000Z"
+ *                   updatedAt: "2025-01-15T10:30:00.000Z"
+ *                 tokens:
+ *                   accessToken: "eyJraWQiOiJcL3Bv..."
+ *                   idToken: "eyJraWQiOiJcL3Bv..."
+ *                   refreshToken: "eyJjdHkiOiJKV1Q..."
+ *                   expiresIn: 3600
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ *       400:
+ *         description: Validation error - Missing required fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               success: false
+ *               error:
+ *                 code: "VALIDATION_ERROR"
+ *                 message: "Username/email and password are required"
+ *                 details: []
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ *       401:
+ *         description: Unauthorized - Invalid credentials
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               success: false
+ *               error:
+ *                 code: "UNAUTHORIZED"
+ *                 message: "Invalid username or password"
+ *                 details: []
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ *       403:
+ *         description: Forbidden - User account not confirmed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               success: false
+ *               error:
+ *                 code: "FORBIDDEN"
+ *                 message: "User account is not confirmed"
+ *                 details: []
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               success: false
+ *               error:
+ *                 code: "INTERNAL_SERVER_ERROR"
+ *                 message: "An unexpected error occurred"
+ *                 details: []
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ */
+router.post('/signin', (req, res) => userController.signIn(req, res));
+
+/**
+ * @swagger
  * /api/v1/users/{id}:
  *   put:
  *     summary: Update user

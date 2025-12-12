@@ -187,4 +187,95 @@ export class UserController {
       });
     }
   }
+
+  async signIn(req: Request, res: Response): Promise<void> {
+    try {
+      const { username, email, password } = req.body;
+      
+      // Use username or email (username can be email or actual username)
+      const usernameOrEmail = username || email;
+      
+      if (!usernameOrEmail || !password) {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Username/email and password are required'
+          },
+          timestamp: new Date().toISOString()
+        });
+        return;
+      }
+
+      const result = await this.userService.signIn(usernameOrEmail, password);
+      
+      res.status(200).json({
+        success: true,
+        message: 'Sign in successful',
+        data: {
+          user: result.user,
+          tokens: result.tokens
+        },
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('required')) {
+          res.status(400).json({
+            success: false,
+            error: {
+              code: 'VALIDATION_ERROR',
+              message: error.message
+            },
+            timestamp: new Date().toISOString()
+          });
+          return;
+        }
+        if (error.message.includes('Invalid username or password') || 
+            error.message.includes('User not found') ||
+            error.message.includes('not found')) {
+          res.status(401).json({
+            success: false,
+            error: {
+              code: 'UNAUTHORIZED',
+              message: error.message
+            },
+            timestamp: new Date().toISOString()
+          });
+          return;
+        }
+        if (error.message.includes('not confirmed')) {
+          res.status(403).json({
+            success: false,
+            error: {
+              code: 'FORBIDDEN',
+              message: error.message
+            },
+            timestamp: new Date().toISOString()
+          });
+          return;
+        }
+        if (error.message.includes('CognitoService is not configured')) {
+          res.status(500).json({
+            success: false,
+            error: {
+              code: 'CONFIGURATION_ERROR',
+              message: error.message
+            },
+            timestamp: new Date().toISOString()
+          });
+          return;
+        }
+      }
+      
+      res.status(500).json({
+        success: false,
+        error: {
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error instanceof Error ? error.message : 'Unknown error'
+        },
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
 } 

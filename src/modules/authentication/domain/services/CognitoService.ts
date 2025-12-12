@@ -4,6 +4,8 @@ import {
   AdminCreateUserCommandInput,
   AdminCreateUserCommandOutput,
   AdminSetUserPasswordCommand,
+  InitiateAuthCommand,
+  InitiateAuthCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { getCognitoConfig } from '../../../../config/cognito';
 
@@ -15,9 +17,18 @@ export interface CreateCognitoUserParams {
   temporaryPassword?: boolean;
 }
 
+export interface SignInResponse {
+  accessToken: string;
+  idToken: string;
+  refreshToken: string;
+  expiresIn: number;
+}
+
 export class CognitoService {
   private client: CognitoIdentityProviderClient;
   private userPoolId: string;
+  private clientId: string;
+  private clientSecret: string | undefined;
 
   constructor() {
     const config = getCognitoConfig();
@@ -42,7 +53,6 @@ export class CognitoService {
       if (accessKeyId.length < 16 || secretAccessKey.length < 16) {
         console.warn('⚠️  AWS credentials appear to be invalid (too short). Please verify your credentials.');
       }
-      
       clientConfig.credentials = {
         accessKeyId,
         secretAccessKey,
@@ -67,6 +77,8 @@ export class CognitoService {
 
     this.client = new CognitoIdentityProviderClient(clientConfig);
     this.userPoolId = config.userPoolId;
+    this.clientId = config.clientId;
+    this.clientSecret = config.clientSecret || undefined;
   }
 
   /**
@@ -173,6 +185,76 @@ export class CognitoService {
         throw new Error(`Failed to set user password in Cognito: ${error.message}`);
       }
       throw new Error('Failed to set user password in Cognito: Unknown error');
+    }
+  }
+
+  /**
+   * Authenticates a user with email/username and password
+   * @param username - User's email or username
+   * @param password - User's password
+   * @returns Promise with authentication tokens
+   */
+  async signIn(username: string, password: string): Promise<SignInResponse> {
+    try {
+      const authParams: InitiateAuthCommandInput = {
+        AuthFlow: (process.env['COGNITO_USER_PASSWORD_AUTH_FLOW'] || 'USER_PASSWORD_AUTH') as 'USER_PASSWORD_AUTH',
+        ClientId: this.clientId,
+        AuthParameters: {
+          USERNAME: username,
+          PASSWORD: password,
+        },
+      };
+
+      // If client secret is configured, add SECRET_HASH
+      if (this.clientSecret) {
+        const crypto = await import('crypto');
+        const message = username + this.clientId;
+        const hmac = crypto.createHmac('sha256', this.clientSecret);
+        hmac.update(message);
+        if (authParams.AuthParameters) {
+          authParams.AuthParameters['SECRET_HASH'] = hmac.digest('base64');
+        }
+      }
+
+      const command = new InitiateAuthCommand(authParams);
+      const response = await this.client.send(command);
+
+      if (!response.AuthenticationResult) {
+        throw new Error('Authentication failed: No authentication result returned');
+      }
+
+      const authResult = response.AuthenticationResult;
+      if (!authResult.AccessToken || !authResult.IdToken || !authResult.RefreshToken) {
+        throw new Error('Authentication failed: Missing tokens in response');
+      }
+
+      return {
+        accessToken: authResult.AccessToken,
+        idToken: authResult.IdToken,
+        refreshToken: authResult.RefreshToken,
+        expiresIn: authResult.ExpiresIn || 3600,
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        // Handle common Cognito authentication errors
+        if (error.message.includes('NotAuthorizedException') || error.message.includes('NotAuthorized')) {
+          throw new Error('Invalid username or password');
+        }
+        if (error.message.includes('UserNotFoundException') || error.message.includes('User does not exist')) {
+          throw new Error('User not found');
+        }
+        if (error.message.includes('UserNotConfirmedException')) {
+          throw new Error('User account is not confirmed');
+        }
+        if (error.message.includes('PasswordResetRequiredException')) {
+          throw new Error('Password reset required');
+        }
+        if (error.message.includes('TooManyFailedAttemptsException')) {
+          throw new Error('Too many failed login attempts. Account temporarily locked');
+        }
+        throw new Error(`Authentication failed: ${error.message}`);
+      }
+      throw new Error('Authentication failed: Unknown error');
     }
   }
 }
