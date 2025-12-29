@@ -8,8 +8,8 @@ export class PropertyService {
     return this.propertyRepository.findAll();
   }
 
-  async getPropertyById(id: number): Promise<Property | null> {
-    if (!id || id <= 0) {
+  async getPropertyById(id: string): Promise<Property | null> {
+    if (!id || id.trim() === '') {
       throw new Error('Invalid property ID');
     }
     return this.propertyRepository.findById(id);
@@ -23,16 +23,16 @@ export class PropertyService {
     return this.propertyRepository.create(propertyData);
   }
 
-  async updateProperty(id: number, propertyData: UpdatePropertyDto): Promise<Property | null> {
-    if (!id || id <= 0) {
+  async updateProperty(id: string, propertyData: UpdatePropertyDto): Promise<Property | null> {
+    if (!id || id.trim() === '') {
       throw new Error('Invalid property ID');
     }
 
     return this.propertyRepository.update(id, propertyData);
   }
 
-  async deleteProperty(id: number): Promise<boolean> {
-    if (!id || id <= 0) {
+  async deleteProperty(id: string): Promise<boolean> {
+    if (!id || id.trim() === '') {
       throw new Error('Invalid property ID');
     }
 

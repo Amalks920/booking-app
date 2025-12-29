@@ -1,8 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../../../../config/database';
-import PropertyModel from './Property'; // adjust path if needed
-import Amenity from './Amenities';
-import RoomAmenity from './RoomAmenities';
 
 export interface RoomAttributes {
   id: string;
@@ -74,7 +71,7 @@ RoomModel.init(
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: PropertyModel,
+        model: 'properties', // Use table name to avoid cross-module coupling
         key: 'id',
       },
       onDelete: 'CASCADE',
@@ -161,21 +158,24 @@ RoomModel.init(
   }
 );
 
-// Associations
-RoomModel.belongsToMany(Amenity, {
+// Associations - using lazy import to avoid circular dependency
+// This function must be called after all related models are initialized
+export function defineRoomAssociations() {
+  const PropertyModel = require('./Property').default;
+  const Amenity = require('./Amenities').default;
+  const RoomAmenity = require('./RoomAmenities').default;
+
+  RoomModel.belongsToMany(Amenity, {
     through: RoomAmenity,
     foreignKey: 'room_id',
     otherKey: 'amenity_id',
     as: 'amenities',
   });
 
-PropertyModel.hasMany(RoomModel, {
-  foreignKey: 'property_id',
-  as: 'rooms',
-});
-RoomModel.belongsTo(PropertyModel, {
-  foreignKey: 'property_id',
-  as: 'property',
-});
+  RoomModel.belongsTo(PropertyModel, {
+    foreignKey: 'property_id',
+    as: 'property',
+  });
+}
 
 export default RoomModel;

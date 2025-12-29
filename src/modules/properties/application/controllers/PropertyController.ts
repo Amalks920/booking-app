@@ -29,13 +29,7 @@ export class PropertyController {
         return;
       }
 
-      const propertyId = parseInt(id);
-      if (isNaN(propertyId)) {
-        res.status(400).json({ error: 'Invalid property ID format' });
-        return;
-      }
-
-      const property = await this.propertyService.getPropertyById(propertyId);
+      const property = await this.propertyService.getPropertyById(id);
       if (!property) {
         res.status(404).json({ error: 'Property not found' });
         return;
@@ -83,14 +77,8 @@ export class PropertyController {
         return;
       }
 
-      const propertyId = parseInt(id);
-      if (isNaN(propertyId)) {
-        res.status(400).json({ error: 'Invalid property ID format' });
-        return;
-      }
-
       const propertyData = req.body;
-      const property = await this.propertyService.updateProperty(propertyId, propertyData);
+      const property = await this.propertyService.updateProperty(id, propertyData);
 
       if (!property) {
         res.status(404).json({ error: 'Property not found' });
@@ -117,13 +105,7 @@ export class PropertyController {
         return;
       }
 
-      const propertyId = parseInt(id);
-      if (isNaN(propertyId)) {
-        res.status(400).json({ error: 'Invalid property ID format' });
-        return;
-      }
-
-      const deleted = await this.propertyService.deleteProperty(propertyId);
+      const deleted = await this.propertyService.deleteProperty(id);
       if (!deleted) {
         res.status(404).json({ error: 'Property not found' });
         return;

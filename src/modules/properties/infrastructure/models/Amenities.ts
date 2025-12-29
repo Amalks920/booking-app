@@ -1,7 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../../../../config/database';
-import RoomModel from './Room';
-import RoomAmenity from './RoomAmenities';
 
 // Interface for Amenity attributes
 export interface AmenityAttributes {
@@ -78,11 +76,18 @@ Amenity.init(
   }
 );
 
-Amenity.belongsToMany(RoomModel, {
+// Associations - using lazy import to avoid circular dependency
+// This function must be called after all related models are initialized
+export function defineAmenityAssociations() {
+  const RoomModel = require('./Room').default;
+  const RoomAmenity = require('./RoomAmenities').default;
+
+  Amenity.belongsToMany(RoomModel, {
     through: RoomAmenity,
     foreignKey: 'amenity_id',
     otherKey: 'room_id',
     as: 'rooms',
   });
+}
 
 export default Amenity;

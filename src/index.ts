@@ -8,6 +8,7 @@ import routes from './routes';
 import { specs } from './config/swagger';
 import { errorHandler } from './shared/middleware/errorHandler';
 import sequelize from './config/database'; // Import your Sequelize instance
+import { initializeDatabase } from './config/databaseInit';
 
 // Load environment variables
 dotenv.config();
@@ -15,30 +16,6 @@ dotenv.config();
 // Create Express app
 const app: Application = express();
 const PORT = process.env['PORT'] || 3000;
-
-// Database connection function
-async function initializeDatabase(): Promise<boolean> {
-  try {
-    console.log('🔄 Connecting to database...');
-    await sequelize.authenticate();
-    console.log('✅ Database connection established successfully');
-    
-    // Sync database models (be careful in production)
-    if (process.env['NODE_ENV'] === 'development') {
-      await sequelize.sync({ alter: true });
-      console.log('✅ Database models synchronized');
-    } else {
-      // In production, just check if we can connect
-      await sequelize.sync({ alter: false });
-      console.log('✅ Database models verified');
-    }
-    
-    return true;
-  } catch (error) {
-    console.error('❌ Unable to connect to the database:', error);
-    return false;
-  }
-}
 
 // Middleware
 app.use(helmet()); // Security headers
@@ -154,12 +131,7 @@ app.use(errorHandler);
 async function startApplication(): Promise<void> {
   try {
     // Initialize database connection
-    const dbConnected = await initializeDatabase();
-    
-    if (!dbConnected) {
-      console.error('❌ Failed to connect to database. Exiting...');
-      process.exit(1);
-    }
+    await initializeDatabase();
     
     // Start the server
     app.listen(PORT, () => {
