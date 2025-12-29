@@ -1,6 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../../../../config/database';
-import User from './User';
 
 // Interface for UserProfile attributes
 export interface UserProfileAttributes {
@@ -39,11 +38,6 @@ export class UserProfile
   public readonly updatedAt!: Date;
 }
 
-UserProfile.belongsTo(User, {
-  foreignKey: 'user_id',
-  as: 'user'
-});
-
 UserProfile.init(
   {
     id: {
@@ -55,7 +49,7 @@ UserProfile.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: User,
+        model: 'users', // Use table name to avoid circular dependency
         key: 'id',
       },
       onDelete: 'CASCADE', // if user is deleted, profile goes too
@@ -109,14 +103,14 @@ UserProfile.init(
   }
 );
 
-// Associations
-User.hasOne(UserProfile, {
-  foreignKey: 'userId',
-  as: 'profile',
-});
-UserProfile.belongsTo(User, {
-  foreignKey: 'userId',
-  as: 'user',
-});
+// Associations - using lazy import to avoid circular dependency
+// This function must be called after both User and UserProfile models are initialized
+export function defineUserProfileAssociations() {
+  const User = require('./User').default;
+  UserProfile.belongsTo(User, {
+    foreignKey: 'userId',
+    as: 'user',
+  });
+}
 
 export default UserProfile;

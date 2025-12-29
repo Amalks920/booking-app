@@ -3,7 +3,7 @@ import sequelize from '../../../../config/database';
 
 
 export interface PropertyAttributes {
-    id: number;
+    id: string;
     property_name: string;
     description: string;
     type: string;           // e.g., Hotel, Apartment, etc.
@@ -27,7 +27,7 @@ export interface PropertyAttributes {
 
 
   export class PropertyModel extends Model<PropertyAttributes, PropertyCreationAttributes> implements PropertyAttributes {
-    public id!: number;
+    public id!: string;
     public property_name!: string;
     public description!: string;
     public type!: string;
@@ -50,9 +50,9 @@ export interface PropertyAttributes {
   PropertyModel.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
       },
       property_name: {
         type: DataTypes.STRING(255),
@@ -122,12 +122,23 @@ export interface PropertyAttributes {
         defaultValue: DataTypes.NOW,
       },
     },
-    {
-      sequelize,
-      tableName: 'properties',
-      modelName: 'Property',
-      timestamps: false,
-    }
-  );
-  
-  export default PropertyModel;
+  {
+    sequelize,
+    tableName: 'properties',
+    modelName: 'Property',
+    timestamps: false,
+  }
+);
+
+// Associations - using lazy import to avoid circular dependency
+// This function must be called after all related models are initialized
+export function definePropertyAssociations() {
+  const RoomModel = require('./Room').default;
+
+  PropertyModel.hasMany(RoomModel, {
+    foreignKey: 'property_id',
+    as: 'rooms',
+  });
+}
+
+export default PropertyModel;

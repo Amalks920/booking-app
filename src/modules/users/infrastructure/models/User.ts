@@ -65,4 +65,14 @@ User.init(
   }
 );
 
+// Associations - using lazy import to avoid circular dependency
+// This function must be called after both User and UserProfile models are initialized
+export function defineUserAssociations() {
+  const UserProfile = require('./User_Profile').default;
+  User.hasOne(UserProfile, {
+    foreignKey: 'userId',
+    as: 'profile',
+  });
+}
+
 export default User; 

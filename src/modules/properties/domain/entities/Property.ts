@@ -1,7 +1,7 @@
 // modules/property/domain/entities/Property.ts
 export class Property {
     constructor(
-      public id: number,
+      public id: string,
       public property_name: string,
       public description: string,
       public type: string,
@@ -57,8 +57,8 @@ export class Property {
   
   export interface IPropertyRepository {
     findAll(): Promise<Property[]>;
-    findById(id: number): Promise<Property | null>;
+    findById(id: string): Promise<Property | null>;
     create(propertyData: CreatePropertyDto): Promise<Property>;
-    update(id: number, propertyData: UpdatePropertyDto): Promise<Property | null>;
-    delete(id: number): Promise<boolean>;
+    update(id: string, propertyData: UpdatePropertyDto): Promise<Property | null>;
+    delete(id: string): Promise<boolean>;
   }

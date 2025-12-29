@@ -1,11 +1,31 @@
 import sequelize from './database';
-import '../modules/users/infrastructure/models/User'; // Import models to register them
+// Import models to register them - must import before defining associations
+import '../modules/users/infrastructure/models/User';
+import '../modules/users/infrastructure/models/User_Profile';
+import { defineUserAssociations } from '../modules/users/infrastructure/models/User';
+import { defineUserProfileAssociations } from '../modules/users/infrastructure/models/User_Profile';
+// Import property models
+import '../modules/properties/infrastructure/models/Property';
+import '../modules/properties/infrastructure/models/Room';
+import '../modules/properties/infrastructure/models/Amenities';
+import '../modules/properties/infrastructure/models/RoomAmenities';
+import { definePropertyAssociations } from '../modules/properties/infrastructure/models/Property';
+import { defineRoomAssociations } from '../modules/properties/infrastructure/models/Room';
+import { defineAmenityAssociations } from '../modules/properties/infrastructure/models/Amenities';
 
 export const initializeDatabase = async (): Promise<void> => {
   try {
     // Test the database connection
     await sequelize.authenticate();
     console.log('✅ Database connection established successfully.');
+    // Define associations after all models are loaded
+    // This ensures both models are fully initialized before associations are created
+    defineUserAssociations();
+    defineUserProfileAssociations();
+    // Define property module associations
+    definePropertyAssociations();
+    defineRoomAssociations();
+    defineAmenityAssociations();
 
     // Sync all models with the database
     // In production, you should use migrations instead of sync

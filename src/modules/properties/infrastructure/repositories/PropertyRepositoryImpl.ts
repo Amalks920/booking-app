@@ -26,7 +26,7 @@ export class PropertyRepositoryImpl implements IPropertyRepository {
     ));
   }
 
-  async findById(id: number): Promise<Property | null> {
+  async findById(id: string): Promise<Property | null> {
     const property = await PropertyModel.findByPk(id);
     if (!property) return null;
 
@@ -90,7 +90,7 @@ export class PropertyRepositoryImpl implements IPropertyRepository {
     );
   }
 
-  async update(id: number, propertyData: UpdatePropertyDto): Promise<Property | null> {
+  async update(id: string, propertyData: UpdatePropertyDto): Promise<Property | null> {
     const property = await PropertyModel.findByPk(id);
     if (!property) return null;
 
@@ -120,7 +120,7 @@ export class PropertyRepositoryImpl implements IPropertyRepository {
     );
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const property = await PropertyModel.findByPk(id);
     if (!property) return false;
 
