@@ -27,7 +27,14 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 // Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
   customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'Express TypeScript API Documentation'
+  customSiteTitle: 'Express TypeScript API Documentation',
+  swaggerOptions: {
+    persistAuthorization: true, // Persist authorization across page refreshes
+    displayRequestDuration: true,
+    filter: true,
+    showExtensions: true,
+    showCommonExtensions: true
+  }
 }));
 
 /**

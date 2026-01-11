@@ -6,7 +6,7 @@ const options: swaggerJsdoc.Options = {
     info: {
       title: 'Express TypeScript API',
       version: '1.0.0',
-      description: 'A modern Express.js API built with TypeScript using modular monolith architecture',
+      description: `A modern Express.js API built with TypeScript using modular monolith architecture`,
       contact: {
         name: 'API Support',
         email: 'support@example.com'
@@ -490,6 +490,10 @@ const options: swaggerJsdoc.Options = {
       {
         name: 'Roles',
         description: 'Role management endpoints'
+      },
+      {
+        name: 'Properties',
+        description: 'Property management endpoints'
       }
     ]
   },

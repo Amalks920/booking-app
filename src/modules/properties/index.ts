@@ -1,0 +1,1 @@
+export { default as propertyRoutes } from './infrastructure/routes/PropertyRoutes';

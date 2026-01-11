@@ -17,10 +17,22 @@ export interface CreateCognitoUserParams {
   temporaryPassword?: boolean;
 }
 
+/**
+ * Authentication tokens returned after successful sign-in
+ * 
+ * Token Usage:
+ * - accessToken: Use for backend API authorization (send in Authorization: Bearer header)
+ * - idToken: Use for frontend user identity (contains user attributes like email, name)
+ * - refreshToken: Use to obtain new access/ID tokens when they expire
+ */
 export interface SignInResponse {
+  /** Access Token - Use for API authorization (backend requests) */
   accessToken: string;
+  /** ID Token - Use for user identity (frontend display) */
   idToken: string;
+  /** Refresh Token - Use to get new tokens when expired */
   refreshToken: string;
+  /** Token expiration time in seconds */
   expiresIn: number;
 }
 
@@ -220,7 +232,7 @@ export class CognitoService {
       const response = await this.client.send(command);
 
       if (!response.AuthenticationResult) {
-        throw new Error('Authentication failed: No authentication result returned');
+        throw new Error('Authentication failed: No authentication result returned'); 
       }
 
       const authResult = response.AuthenticationResult;

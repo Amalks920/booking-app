@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { PropertyController } from '../../application/controllers/PropertyController';
 import { PropertyService } from '../../domain/services/PropertyService';
 import { PropertyRepositoryImpl } from '../repositories/PropertyRepositoryImpl';
+import { authenticateToken } from '../../../../shared/middleware/authMiddleware';
 
 const router = Router();
 
@@ -26,6 +27,11 @@ const propertyController = new PropertyController(propertyService);
  *       - Sorting by various fields (property_name, created_at, updated_at)
  *       - Search functionality for property name or description
  *       - **Note:** By default, only active properties are returned. Use status filter to include inactive properties.
+ *       
+ *       **Authentication:**
+ *       - This endpoint requires authentication via Bearer token (JWT)
+ *       - Click the "Authorize" button at the top of the Swagger UI
+ *       - The token will be automatically included in the Authorization header for all requests
  *     tags: [Properties]
  *     security:
  *       - bearerAuth: []
@@ -115,7 +121,7 @@ const propertyController = new PropertyController(propertyService);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */ 
-router.get('/', (req, res) => propertyController.getAllProperties(req, res));
+    router.get('/',authenticateToken, (req, res) => propertyController.getAllProperties(req, res));
 
 /**
  * @swagger
