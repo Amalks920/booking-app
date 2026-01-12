@@ -116,6 +116,13 @@ export class UserService {
     };
   }
 
+  async refreshTokens(refreshToken: string, username: string): Promise<SignInResponse> {
+    if (!this.cognitoService) {
+      throw new Error('CognitoService is not configured');
+    }
+    return this.cognitoService.refreshTokens(refreshToken, username);
+  }
+
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

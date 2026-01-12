@@ -278,4 +278,51 @@ export class UserController {
       });
     }
   }
+
+
+  async refreshTokens(req: Request, res: Response): Promise<void> {
+    try {
+      const { refreshToken, username } = req.body;
+      
+      if (!refreshToken) {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Refresh token is required'
+          },
+          timestamp: new Date().toISOString()
+        });
+        return;
+      }
+
+      if (!username) {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Username is required'
+          },
+          timestamp: new Date().toISOString()
+        });
+        return;
+      }
+
+      const tokens = await this.userService.refreshTokens(refreshToken, username);
+      res.status(200).json({
+        success: true,
+        message: 'Tokens refreshed successfully',
+        data: tokens
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: {
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error instanceof Error ? error.message : 'Unknown error'
+        },
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
 } 

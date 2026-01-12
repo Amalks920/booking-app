@@ -269,5 +269,56 @@ export class CognitoService {
       throw new Error('Authentication failed: Unknown error');
     }
   }
+
+  /**
+   * Returns new accessToken idToken and refreshToken
+   * @param refreshToken - Refresh token
+   * @param username - Username (email) used to compute SECRET_HASH when client secret is configured
+   * @returns Promise with new accessToken idToken and refreshToken
+   */
+  async refreshTokens(refreshToken: string, username: string): Promise<SignInResponse> {
+    try {
+      const authParams: InitiateAuthCommandInput = {
+        AuthFlow: 'REFRESH_TOKEN_AUTH',
+        ClientId: this.clientId,
+        AuthParameters: {
+          REFRESH_TOKEN: refreshToken,
+        },
+      };
+
+      // If client secret is configured, add SECRET_HASH
+      if (this.clientSecret) {
+        const crypto = await import('crypto');
+        const message = username + this.clientId;
+        const hmac = crypto.createHmac('sha256', this.clientSecret);
+        hmac.update(message);
+        if (authParams.AuthParameters) {
+          authParams.AuthParameters['SECRET_HASH'] = hmac.digest('base64');
+        }
+      }
+
+      const command = new InitiateAuthCommand(authParams);
+      const response = await this.client.send(command);
+      if (!response.AuthenticationResult) {
+        throw new Error('Authentication failed: No authentication result returned');
+      }
+      const authResult = response.AuthenticationResult;
+
+      if(authResult.AccessToken && authResult.IdToken && authResult.RefreshToken) {
+      return {
+          accessToken: authResult.AccessToken,
+          idToken: authResult.IdToken,
+          refreshToken: authResult.RefreshToken,
+          expiresIn: authResult.ExpiresIn || 3600,
+        };
+      }
+      throw new Error('Authentication failed: Missing tokens in response');
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Authentication failed: ${error.message}`);
+      }
+      throw new Error('Authentication failed: Unknown error');
+    }
+  }
 }
 

@@ -853,6 +853,105 @@ router.put('/:id', (req, res) => userController.updateUser(req, res));
  */
 router.delete('/:id', (req, res) => userController.deleteUser(req, res));
 
+
+/**
+ * @swagger
+ * /api/v1/users/refresh-tokens:
+ *   post:
+ *     summary: Refresh tokens
+ *     description: |
+ *       Refresh access and ID tokens using a refresh token.
+ *       This endpoint validates the refresh token against AWS Cognito and returns
+ *       new access and ID tokens without requiring the user to sign in again.
+ *       
+ *       **Token Refresh:**
+ *       - Validates the refresh token with AWS Cognito
+ *       - Returns new access token and ID token
+ *       - Refresh token remains the same (unless rotated)
+ *       - Tokens can be used for subsequent authenticated requests
+ *       
+ *       **Security:** This endpoint does not require authentication (public endpoint).
+ *       The refresh token itself serves as the authentication mechanism.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *               - username
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: The refresh token obtained from the sign-in endpoint
+ *                 example: "eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBMV81In0..."
+ *               username:
+ *                 type: string
+ *                 description: The username (email) used during sign-in. Required for SECRET_HASH calculation when client secret is configured.
+ *                 example: "user@example.com"
+ *           example:
+ *             refreshToken: "eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBMV81In0..."
+ *             username: "user@example.com"
+ *     responses:
+ *       200:
+ *         description: Tokens refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
+ *             example:
+ *               success: true
+ *               message: "Tokens refreshed successfully"
+ *               data:
+ *                 accessToken: "eyJraWQiOiJcL3Bv..."
+ *                 idToken: "eyJraWQiOiJcL3Bv..."
+ *                 refreshToken: "eyJjdHkiOiJKV1Q..."
+ *                 expiresIn: 3600
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ *       400:
+ *         description: Validation error - Missing or invalid refresh token or username
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               success: false
+ *               error:
+ *                 code: "VALIDATION_ERROR"
+ *                 message: "Refresh token and username are required"
+ *                 details: []
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ *       401:
+ *         description: Unauthorized - Invalid or expired refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               success: false
+ *               error:
+ *                 code: "UNAUTHORIZED"
+ *                 message: "Invalid or expired refresh token"
+ *                 details: []
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               success: false
+ *               error:
+ *                 code: "INTERNAL_SERVER_ERROR"
+ *                 message: "An unexpected error occurred"
+ *                 details: []
+ *               timestamp: "2025-01-15T12:00:00.000Z"
+ */
+router.post('/refresh-tokens', (req, res) => userController.refreshTokens(req, res));
+
 export default router; 
 
 
