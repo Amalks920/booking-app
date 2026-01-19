@@ -2,12 +2,14 @@ import { Router, Request, Response } from 'express';
 import { userRoutes } from '../modules/users';
 import { roleRoutes } from '../modules/users';
 import { propertyRoutes } from '../modules/properties';
+import { roomRoutes } from '../modules/properties';
 const router = Router();
 
 // Mount module routes
 router.use('/users', userRoutes);
 router.use('/roles', roleRoutes);
 router.use('/properties', propertyRoutes);
+router.use('/rooms', roomRoutes);
 /**
  * @swagger
  * /api/v1:

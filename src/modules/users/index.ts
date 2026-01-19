@@ -2,6 +2,7 @@
 export { User, CreateUserDto, UpdateUserDto, UserRepository } from './domain/entities/User';
 export { UserService } from './domain/services/UserService';
 export {RoleService} from './domain/services/RoleService';
+export { CognitoService, SignInResponse, CreateCognitoUserParams } from './domain/services/CognitoService';
 
 // Application Layer
 export { UserController } from './application/controllers/UserController';

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { UserController } from '../../application/controllers/UserController';
 import { UserService } from '../../domain/services/UserService';
 import { UserRepositoryImpl } from '../repositories/UserRepositoryImpl';
-import { CognitoService } from '../../../authentication/domain/services/CognitoService';
+import { CognitoService } from '../../domain/services/CognitoService';
 
 const router = Router();
 

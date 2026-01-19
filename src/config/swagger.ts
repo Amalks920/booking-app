@@ -413,6 +413,44 @@ const options: swaggerJsdoc.Options = {
             updated_by: { type: 'integer', description: 'Updater user ID' }
           }
         },
+        CreateRoomRequest: {
+          type: 'object',
+          required: ['name', 'description', 'property_id', 'type', 'capacity', 'beds', 'price_per_night', 'currency', 'is_smoking_allowed', 'has_private_bathroom', 'created_by', 'updated_by'],
+          properties: {
+            name: { type: 'string', description: 'Name of the room' },
+            description: { type: 'string', description: 'Room description' },
+            property_id: { type: 'string', description: 'ID of the property this room belongs to' },
+            type: { type: 'string', description: 'Type of room (e.g., single, double, suite)' },
+            capacity: { type: 'integer', description: 'Maximum number of guests the room can accommodate' },
+            beds: { type: 'string', description: 'Description of beds in the room' },
+            price_per_night: { type: 'number', format: 'float', description: 'Price per night for the room' },
+            currency: { type: 'string', description: 'Currency code (e.g., USD, EUR)' },
+            is_smoking_allowed: { type: 'boolean', description: 'Whether smoking is allowed in the room' },
+            has_private_bathroom: { type: 'boolean', description: 'Whether the room has a private bathroom' },
+            status: { type: 'string', enum: ['available', 'booked', 'maintenance'], description: 'Current status of the room', default: 'available' },
+            created_by: { type: 'string', description: 'ID of the user creating the room' },
+            updated_by: { type: 'string', description: 'ID of the user updating the room' }
+          }
+        },
+        UpdateRoomRequest: {
+          type: 'object',
+          properties: {
+            property_id: { type: 'string', description: 'ID of the property this room belongs to' },
+            name: { type: 'string', description: 'Name of the room' },
+            type: { type: 'string', description: 'Type of room (e.g., single, double, suite)' },
+            description: { type: 'string', description: 'Room description' },
+            capacity: { type: 'integer', description: 'Maximum number of guests the room can accommodate' },
+            beds: { type: 'string', description: 'Description of beds in the room' },
+            price_per_night: { type: 'number', format: 'float', description: 'Price per night for the room' },
+            currency: { type: 'string', description: 'Currency code (e.g., USD, EUR)' },
+            status: { type: 'string', enum: ['available', 'booked', 'maintenance'], description: 'Current status of the room' },
+            floor_number: { type: 'integer', description: 'Floor number where the room is located' },
+            size_sq_m: { type: 'number', format: 'float', description: 'Size of the room in square meters' },
+            view_type: { type: 'string', description: 'Type of view from the room (e.g., ocean, city, garden)' },
+            is_smoking_allowed: { type: 'boolean', description: 'Whether smoking is allowed in the room' },
+            has_private_bathroom: { type: 'boolean', description: 'Whether the room has a private bathroom' }
+          }
+        },
         Error: {
           type: 'object',
           properties: {
@@ -484,16 +522,16 @@ const options: swaggerJsdoc.Options = {
         description: 'User management endpoints'
       },
       {
-        name: 'Auth',
-        description: 'Auth management endpoints'
-      },
-      {
         name: 'Roles',
         description: 'Role management endpoints'
       },
       {
         name: 'Properties',
         description: 'Property management endpoints'
+      },
+      {
+        name: 'Rooms',
+        description: 'Room management endpoints'
       }
     ]
   },

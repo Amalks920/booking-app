@@ -42,7 +42,7 @@ export interface IRoomRepository {
   findAll(): Promise<Room[]>;
   findById(id: number): Promise<Room | null>;
   create(roomData: CreateRoomDto): Promise<Room>;
-  update(id: number, roomData: UpdateRoomDto): Promise<Room | null>;
-  delete(id: number): Promise<boolean>;
+  update(id: string, roomData: UpdateRoomDto): Promise<Room | null>;
+  delete(id: string): Promise<boolean>;
 }
   

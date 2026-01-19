@@ -1,7 +1,7 @@
 export interface Booking {
-  id: number;
-  user_id: number;
-  property_id: number;
+  id: string;
+  user_id: string;
+  property_id: string;
   check_in_date: Date;
   check_out_date: Date;
   total_amount: number;
@@ -11,7 +11,7 @@ export interface Booking {
 }
 
 export interface CreateBookingDto {
-  user_id: number;
+  user_id: string;
   property_id: number;
   check_in_date: Date;
   check_out_date: Date;

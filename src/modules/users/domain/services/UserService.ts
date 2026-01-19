@@ -1,5 +1,5 @@
 import { User, CreateUserDto, UpdateUserDto, UserRepository } from '../entities/User';
-import { CognitoService, SignInResponse } from '../../../authentication/domain/services/CognitoService';
+import { CognitoService, SignInResponse } from './CognitoService';
 
 export class UserService {
   constructor(

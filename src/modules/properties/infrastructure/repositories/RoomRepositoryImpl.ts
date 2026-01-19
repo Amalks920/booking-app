@@ -59,7 +59,7 @@ export class RoomRepositoryImpl implements IRoomRepository {
     );
   }
 
-  async update(id: number, roomData: UpdateRoomDto): Promise<Room | null> {
+  async update(id: string, roomData: UpdateRoomDto): Promise<Room | null> {
     const room = await RoomModel.findByPk(id);
     if (!room) return null;
 
@@ -79,7 +79,7 @@ export class RoomRepositoryImpl implements IRoomRepository {
     );
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const room = await RoomModel.findByPk(id);
     if (!room) return false;
 
