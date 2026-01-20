@@ -99,8 +99,7 @@ export class CognitoService {
    * @returns Promise with Cognito user creation response
    */
   async createUser(params: CreateCognitoUserParams): Promise<AdminCreateUserCommandOutput> {
-    const { email, password, name, phoneNumber, temporaryPassword = false } = params;
-
+    let { email, password, name, phoneNumber, temporaryPassword = false } = params;
     const userAttributes: { Name: string; Value: string }[] = [
       { Name: 'email', Value: email },
       { Name: 'email_verified', Value: 'true' },

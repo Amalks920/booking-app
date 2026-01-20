@@ -6,10 +6,21 @@ export interface User {
   updatedAt?: Date;
 }
 
-export interface CreateUserDto {
+export interface UserDto {
   name: string;
   email: string;
+  password: string;
 }
+
+export interface UserProfileDto {
+  firstName: string;
+  lastName: string;
+  countryCode: string;
+  phoneNumber: string;
+  roleId?: string;
+}
+
+export type CreateUserDto = UserDto & UserProfileDto;
 
 export interface UpdateUserDto {
   name?: string;

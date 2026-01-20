@@ -54,16 +54,18 @@ export class UserController {
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email, password, phone_number, country_code } = req.body;
+      const { name, email, password, firstName, lastName, countryCode, phoneNumber } = req.body;
       
       // Build phoneNumber from country_code and phone_number if both are provided
-      const phoneNumber = country_code && phone_number ? `${country_code}${phone_number}` : phone_number;
       
       const user = await this.userService.createUser({ 
         name, 
         email, 
         password,
-        phoneNumber
+        firstName,
+        lastName,
+        countryCode,
+        phoneNumber,
       });
       
       res.status(201).json({

@@ -5,6 +5,7 @@ import sequelize from '../../../../config/database';
 export interface UserProfileAttributes {
   id: number;
   userId: number;
+  roleId?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -32,6 +33,7 @@ export class UserProfile
   public email!: string;
   public countryCode!: string;
   public phoneNumber!: string;
+  public roleId?: string;
   public createdBy?: number;
   public updatedBy?: number;
   public readonly createdAt!: Date;
@@ -76,6 +78,14 @@ UserProfile.init(
     phoneNumber: {
       type: DataTypes.STRING(20),
       allowNull: false,
+    },
+    roleId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'roles',
+        key: 'id',
+      },
     },
     createdBy: {
       type: DataTypes.INTEGER,

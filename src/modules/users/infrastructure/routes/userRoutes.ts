@@ -3,6 +3,8 @@ import { UserController } from '../../application/controllers/UserController';
 import { UserService } from '../../domain/services/UserService';
 import { UserRepositoryImpl } from '../repositories/UserRepositoryImpl';
 import { CognitoService } from '../../domain/services/CognitoService';
+import { validateBody } from '../../../../shared/validation/validateBody';
+import { createUserSchema } from '../validators/userSchema';
 
 const router = Router();
 
@@ -443,7 +445,9 @@ router.get('/:id', (req, res) => userController.getUserById(req, res));
  *                 details: []
  *               timestamp: "2025-01-15T12:00:00.000Z"
  */
-router.post('/create', (req, res) => userController.createUser(req, res));
+router.post('/create',
+     validateBody(createUserSchema), 
+     (req, res) => userController.createUser(req, res));
 
 /**
  * @swagger

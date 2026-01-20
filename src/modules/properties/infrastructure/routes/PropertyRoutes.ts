@@ -287,7 +287,7 @@ router.get('/:id', (req, res) => propertyController.getPropertyById(req, res));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', (req, res) => propertyController.createProperty(req, res));
+router.post('/',authenticateToken, (req, res) => propertyController.createProperty(req, res));
 
 /**
  * @swagger

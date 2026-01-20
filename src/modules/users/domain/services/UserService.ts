@@ -18,7 +18,7 @@ export class UserService {
     return this.userRepository.findById(id);
   }
 
-  async createUser(userData: CreateUserDto & { password?: string; phoneNumber?: string }): Promise<User> {
+  async createUser(userData: CreateUserDto): Promise<User> {
     if (!userData.name || !userData.email) {
       throw new Error('Name and email are required');
     }
@@ -30,6 +30,10 @@ export class UserService {
     // If CognitoService is provided and password is given, create user in Cognito first
     if (this.cognitoService && userData.password) {
       try {
+        const formattedPhoneNumber = userData.phoneNumber
+          ? this.formatE164PhoneNumber(userData.countryCode, userData.phoneNumber)
+          : undefined;
+
         const cognitoParams: {
           email: string;
           password: string;
@@ -43,8 +47,8 @@ export class UserService {
           temporaryPassword: false
         };
         
-        if (userData.phoneNumber) {
-          cognitoParams.phoneNumber = userData.phoneNumber;
+        if (formattedPhoneNumber) {
+          cognitoParams.phoneNumber = formattedPhoneNumber;
         }
         
         await this.cognitoService.createUser(cognitoParams);
@@ -126,5 +130,28 @@ export class UserService {
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  }
+
+  private formatE164PhoneNumber(countryCode?: string, phoneNumber?: string): string {
+    const rawCountryCode = (countryCode || '').trim();
+    const rawPhoneNumber = (phoneNumber || '').trim();
+
+    if (!rawCountryCode || !rawPhoneNumber) {
+      throw new Error('countryCode and phoneNumber are required when phoneNumber is provided');
+    }
+
+    const normalizedCountryCode = rawCountryCode.startsWith('+')
+      ? rawCountryCode
+      : `+${rawCountryCode}`;
+
+    const digitsOnly = rawPhoneNumber.replace(/\D/g, '');
+    const combined = `${normalizedCountryCode}${digitsOnly}`.replace(/\s+/g, '');
+    const e164 = combined.replace(/(?!^\+)\D/g, '');
+
+    if (!/^\+[1-9]\d{1,14}$/.test(e164)) {
+      throw new Error('Invalid phone number format. Use E.164 format, e.g. +15551234567');
+    }
+
+    return e164;
   }
 } 

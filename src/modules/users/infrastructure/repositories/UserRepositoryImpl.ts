@@ -1,5 +1,7 @@
 import { User, CreateUserDto, UpdateUserDto, UserRepository } from '../../domain/entities/User';
 import UserModel from '../models/User';
+import UserProfile from '../models/User_Profile';
+import sequelize from '../../../../config/database';
 
 export class UserRepositoryImpl implements UserRepository {
   async findAll(): Promise<User[]> {
@@ -29,18 +31,30 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async create(userData: CreateUserDto): Promise<User> {
-    const newUser = await UserModel.create({
-      name: userData.name,
-      email: userData.email
-    });
+    return sequelize.transaction(async (transaction) => {
+      const newUser = await UserModel.create({
+        name: userData.name,
+        email: userData.email
+      }, { transaction });
 
-    return {
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-      createdAt: newUser.createdAt,
-      updatedAt: newUser.updatedAt
-    };
+      await UserProfile.create({
+        userId: newUser.id,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        countryCode: userData.countryCode,
+        phoneNumber: userData.phoneNumber,
+        ...(userData.roleId ? { roleId: userData.roleId } : {})
+      }, { transaction });
+
+      return {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        createdAt: newUser.createdAt,
+        updatedAt: newUser.updatedAt
+      };
+    });
   }
 
   async update(id: number, userData: UpdateUserDto): Promise<User | null> {
