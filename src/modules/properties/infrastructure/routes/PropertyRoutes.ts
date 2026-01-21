@@ -4,6 +4,8 @@ import { PropertyController } from '../../application/controllers/PropertyContro
 import { PropertyService } from '../../domain/services/PropertyService';
 import { PropertyRepositoryImpl } from '../repositories/PropertyRepositoryImpl';
 import { authenticateToken } from '../../../../shared/middleware/authMiddleware';
+import { validateBody } from '../../../../shared/validation/validateBody';
+import { createPropertySchema } from '../../validators/propertySchema';
 
 const router = Router();
 
@@ -287,7 +289,9 @@ router.get('/:id', (req, res) => propertyController.getPropertyById(req, res));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/',authenticateToken, (req, res) => propertyController.createProperty(req, res));
+router.post('/',
+    validateBody(createPropertySchema),
+    authenticateToken, (req, res) => propertyController.createProperty(req, res));
 
 /**
  * @swagger

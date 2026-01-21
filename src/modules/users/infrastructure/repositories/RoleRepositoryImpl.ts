@@ -6,7 +6,7 @@ export class RoleRepositoryImpl implements RoleRepository {
     return [];
   }
 
-  async findById(id: number): Promise<Role | null> {
+  async findById(id: string): Promise<Role | null> {
     console.log(id)
     // TODO: Implement database query
     return null;
@@ -15,25 +15,25 @@ export class RoleRepositoryImpl implements RoleRepository {
   async create(roleData: CreateRoleDto): Promise<Role> {
     // TODO: Implement database query
     const newRole: Role = {
-      id: 1,
+      id: '00000000-0000-0000-0000-000000000000',
       role: roleData.role,
       code: roleData.code,
-      created_by: 1,
-      updated_by: 1,
+      created_by: '00000000-0000-0000-0000-000000000000',
+      updated_by: '00000000-0000-0000-0000-000000000000',
       created_at: new Date(),
       updated_at: new Date()
     };
     return newRole;
   }
 
-  async update(id: number, roleData: UpdateRoleDto): Promise<Role | null> {
+  async update(id: string, roleData: UpdateRoleDto): Promise<Role | null> {
     id
     roleData
     // TODO: Implement database query
     return null;
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     id
     // TODO: Implement database query
     return false;

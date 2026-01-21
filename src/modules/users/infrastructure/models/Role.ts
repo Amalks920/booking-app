@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../../../config/database';
 
 export interface RoleAttributes {
-  id: number;
+  id: string;
   role: string;
   code: string;
 }
@@ -13,7 +13,7 @@ export interface RoleCreationAttributes {
 }
 
 export class Role extends Model<RoleAttributes, RoleCreationAttributes> implements RoleAttributes {
-  public id!: number;
+  public id!: string;
   public role!: string;
   public code!: string;
 }
@@ -22,8 +22,8 @@ export class Role extends Model<RoleAttributes, RoleCreationAttributes> implemen
 Role.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     role: {

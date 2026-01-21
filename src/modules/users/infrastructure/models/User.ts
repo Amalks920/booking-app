@@ -3,7 +3,7 @@ import sequelize from '../../../../config/database';
 
 // Interface for User attributes
 export interface UserAttributes {
-  id: number;
+  id: string;
   name: string;
   email: string;
   createdAt?: Date;
@@ -15,7 +15,7 @@ export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 
 
 // Sequelize User model
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
+  public id!: string;
   public name!: string;
   public email!: string;
   public readonly createdAt!: Date;
@@ -26,8 +26,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     name: {

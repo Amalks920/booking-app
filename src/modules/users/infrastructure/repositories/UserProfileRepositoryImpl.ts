@@ -12,14 +12,14 @@ export class UserProfileRepositoryImpl implements UserProfileRepository {
       email: profile.email,
       country_code: profile.countryCode,
       phone_number: profile.phoneNumber,
-      created_by: profile.createdBy || 0,
-      updated_by: profile.updatedBy || 0,
+      created_by: profile.createdBy ?? null,
+      updated_by: profile.updatedBy ?? null,
       createdAt: profile.createdAt,
       updatedAt: profile.updatedAt,
     }));
   }
 
-  async findById(id: number): Promise<UserProfile | null> {
+  async findById(id: string): Promise<UserProfile | null> {
     const profile = await UserProfileModel.findByPk(id);
     if (!profile) return null;
 
@@ -31,8 +31,8 @@ export class UserProfileRepositoryImpl implements UserProfileRepository {
       email: profile.email,
       country_code: profile.countryCode,
       phone_number: profile.phoneNumber,
-      created_by: profile.createdBy || 0,
-      updated_by: profile.updatedBy || 0,
+      created_by: profile.createdBy ?? null,
+      updated_by: profile.updatedBy ?? null,
       createdAt: profile.createdAt,
       updatedAt: profile.updatedAt,
     };
@@ -46,8 +46,8 @@ export class UserProfileRepositoryImpl implements UserProfileRepository {
       email: '',
       countryCode: '',
       phoneNumber: profileData.phone || '',
-      createdBy: 0,
-      updatedBy: 0,
+      createdBy: null,
+      updatedBy: null,
     });
 
     return {
@@ -58,14 +58,14 @@ export class UserProfileRepositoryImpl implements UserProfileRepository {
       email: newProfile.email,
       country_code: newProfile.countryCode,
       phone_number: newProfile.phoneNumber,
-      created_by: newProfile.createdBy || 0,
-      updated_by: newProfile.updatedBy || 0,
+      created_by: newProfile.createdBy ?? null,
+      updated_by: newProfile.updatedBy ?? null,
       createdAt: newProfile.createdAt,
       updatedAt: newProfile.updatedAt,
     };
   }
 
-  async update(id: number, profileData: UpdateUserProfileDto): Promise<UserProfile | null> {
+  async update(id: string, profileData: UpdateUserProfileDto): Promise<UserProfile | null> {
     const profile = await UserProfileModel.findByPk(id);
     if (!profile) return null;
 
@@ -84,14 +84,14 @@ export class UserProfileRepositoryImpl implements UserProfileRepository {
       email: updatedProfile.email,
       country_code: updatedProfile.countryCode,
       phone_number: updatedProfile.phoneNumber,
-      created_by: updatedProfile.createdBy || 0,
-      updated_by: updatedProfile.updatedBy || 0,
+      created_by: updatedProfile.createdBy ?? null,
+      updated_by: updatedProfile.updatedBy ?? null,
       createdAt: updatedProfile.createdAt,
       updatedAt: updatedProfile.updatedAt,
     };
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const profile = await UserProfileModel.findByPk(id);
     if (!profile) return false;
 
@@ -99,7 +99,7 @@ export class UserProfileRepositoryImpl implements UserProfileRepository {
     return true;
   }
 
-  async findByUserId(userId: number): Promise<UserProfile | null> {
+  async findByUserId(userId: string): Promise<UserProfile | null> {
     const profile = await UserProfileModel.findOne({ where: { userId } });
     if (!profile) return null;
 
@@ -111,8 +111,8 @@ export class UserProfileRepositoryImpl implements UserProfileRepository {
       email: profile.email,
       country_code: profile.countryCode,
       phone_number: profile.phoneNumber,
-      created_by: profile.createdBy || 0,
-      updated_by: profile.updatedBy || 0,
+      created_by: profile.createdBy ?? null,
+      updated_by: profile.updatedBy ?? null,
       createdAt: profile.createdAt,
       updatedAt: profile.updatedAt,
     };

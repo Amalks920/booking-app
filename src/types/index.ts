@@ -10,7 +10,7 @@ export interface ApiResponse<T = any> {
 
 // User interface example
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   createdAt?: Date;

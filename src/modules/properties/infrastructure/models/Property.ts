@@ -127,6 +127,12 @@ export interface PropertyAttributes {
     tableName: 'properties',
     modelName: 'Property',
     timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ['property_name', 'address', 'city', 'state', 'country', 'pincode'],
+      },
+    ],
   }
 );
 

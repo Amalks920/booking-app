@@ -271,14 +271,14 @@ export function authenticate(
         // Note: Access Tokens may not have email, so this works better with ID tokens
         if (userEmail) {
           (req as AuthenticatedRequest).user = {
-            id: 0, // Placeholder - user ID not available without database lookup
+            id: '0', // Placeholder - user ID not available without database lookup
             name: (payload['name'] as string) || userEmail,
             email: userEmail,
           };
         } else if (cognitoUserId) {
           // Fallback: create minimal user object with Cognito ID if email not available
           (req as AuthenticatedRequest).user = {
-            id: 0,
+            id: '0',
             name: cognitoUserId,
             email: '', // Email not available in Access Token
           };

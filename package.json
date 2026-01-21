@@ -11,6 +11,7 @@
     "clean": "rm -rf dist",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
+    "migrate": "ts-node-dev --transpile-only src/scripts/run-migrations.ts",
     "test:db": "ts-node src/scripts/test-db-connection.ts"
   },
   "keywords": [

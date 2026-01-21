@@ -11,8 +11,8 @@ export class UserService {
     return this.userRepository.findAll();
   }
 
-  async getUserById(id: number): Promise<User | null> {
-    if (!id || id <= 0) {
+  async getUserById(id: string): Promise<User | null> {
+    if (!id) {
       throw new Error('Invalid user ID');
     }
     return this.userRepository.findById(id);
@@ -66,8 +66,8 @@ export class UserService {
     return this.userRepository.create(userData);
   }
 
-  async updateUser(id: number, userData: UpdateUserDto): Promise<User | null> {
-    if (!id || id <= 0) {
+  async updateUser(id: string, userData: UpdateUserDto): Promise<User | null> {
+    if (!id) {
       throw new Error('Invalid user ID');
     }
 
@@ -78,8 +78,8 @@ export class UserService {
     return this.userRepository.update(id, userData);
   }
 
-  async deleteUser(id: number): Promise<boolean> {
-    if (!id || id <= 0) {
+  async deleteUser(id: string): Promise<boolean> {
+    if (!id) {
       throw new Error('Invalid user ID');
     }
 

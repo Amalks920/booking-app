@@ -50,9 +50,8 @@ export class RoleController {
         return;
       }
 
-      const id = parseInt(idParam);
-      
-      if (!id || id <= 0) {
+      const id = idParam;
+      if (!id) {
         res.status(400).json({
           success: false,
           error: {
@@ -61,7 +60,7 @@ export class RoleController {
             details: [
               {
                 field: 'id',
-                message: 'Role ID must be a positive integer'
+                message: 'Role ID must be a valid UUID'
               }
             ]
           },
@@ -202,10 +201,10 @@ export class RoleController {
         return;
       }
 
-      const id = parseInt(idParam);
+      const id = idParam;
       const { role, code } = req.body;
-      
-      if (!id || id <= 0) {
+
+      if (!id) {
         res.status(400).json({
           success: false,
           error: {
@@ -214,7 +213,7 @@ export class RoleController {
             details: [
               {
                 field: 'id',
-                message: 'Role ID must be a positive integer'
+                message: 'Role ID must be a valid UUID'
               }
             ]
           },
@@ -301,9 +300,8 @@ export class RoleController {
         return;
       }
 
-      const id = parseInt(idParam);
-      
-      if (!id || id <= 0) {
+      const id = idParam;
+      if (!id) {
         res.status(400).json({
           success: false,
           error: {
@@ -312,7 +310,7 @@ export class RoleController {
             details: [
               {
                 field: 'id',
-                message: 'Role ID must be a positive integer'
+                message: 'Role ID must be a valid UUID'
               }
             ]
           },

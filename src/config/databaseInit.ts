@@ -27,11 +27,15 @@ export const initializeDatabase = async (): Promise<void> => {
     defineRoomAssociations();
     defineAmenityAssociations();
 
-    // Sync all models with the database
+    // Sync all models with the database (dev only)
     // In production, you should use migrations instead of sync
     if (process.env['NODE_ENV'] === 'development') {
-      await sequelize.sync({ force: false }); // force: true will drop tables
-      console.log('✅ Database models synchronized.');
+      const syncMode = process.env['DB_SYNC_MODE'] || 'alter';
+      const syncOptions =
+        syncMode === 'force' ? { force: true } : syncMode === 'alter' ? { alter: true } : {};
+
+      await sequelize.sync(syncOptions);
+      console.log(`✅ Database models synchronized (mode: ${syncMode}).`);
     }
 
     console.log('🚀 Database initialization completed.');

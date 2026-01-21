@@ -15,7 +15,7 @@ export class UserRepositoryImpl implements UserRepository {
     }));
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {
     const user = await UserModel.findByPk(id);
     if (!user) {
       return null;
@@ -57,7 +57,7 @@ export class UserRepositoryImpl implements UserRepository {
     });
   }
 
-  async update(id: number, userData: UpdateUserDto): Promise<User | null> {
+  async update(id: string, userData: UpdateUserDto): Promise<User | null> {
     const user = await UserModel.findByPk(id);
     if (!user) {
       return null;
@@ -82,7 +82,7 @@ export class UserRepositoryImpl implements UserRepository {
     };
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const user = await UserModel.findByPk(id);
     if (!user) {
       return false;

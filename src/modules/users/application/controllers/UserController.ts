@@ -28,13 +28,7 @@ export class UserController {
         return;
       }
 
-      const userId = parseInt(id);
-      if (isNaN(userId)) {
-        res.status(400).json({ error: 'Invalid user ID format' });
-        return;
-      }
-
-      const user = await this.userService.getUserById(userId);
+      const user = await this.userService.getUserById(id);
       if (!user) {
         res.status(404).json({ error: 'User not found' });
         return;
@@ -128,14 +122,8 @@ export class UserController {
         return;
       }
 
-      const userId = parseInt(id);
-      if (isNaN(userId)) {
-        res.status(400).json({ error: 'Invalid user ID format' });
-        return;
-      }
-
       const { name, email } = req.body;
-      const user = await this.userService.updateUser(userId, { name, email });
+      const user = await this.userService.updateUser(id, { name, email });
       
       if (!user) {
         res.status(404).json({ error: 'User not found' });
@@ -167,13 +155,7 @@ export class UserController {
         return;
       }
 
-      const userId = parseInt(id);
-      if (isNaN(userId)) {
-        res.status(400).json({ error: 'Invalid user ID format' });
-        return;
-      }
-
-      const deleted = await this.userService.deleteUser(userId);
+      const deleted = await this.userService.deleteUser(id);
       if (!deleted) {
         res.status(404).json({ error: 'User not found' });
         return;

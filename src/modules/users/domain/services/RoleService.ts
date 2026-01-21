@@ -7,8 +7,8 @@ export class RoleService {
     return this.roleRepository.findAll();
   }
 
-  async getRoleById(id: number): Promise<Role | null> {
-    if (!id || id <= 0) {
+  async getRoleById(id: string): Promise<Role | null> {
+    if (!id) {
       throw new Error('Invalid role ID');
     }
     return this.roleRepository.findById(id);
@@ -30,8 +30,8 @@ export class RoleService {
     return this.roleRepository.create(roleData);
   }
 
-  async updateRole(id: number, roleData: UpdateRoleDto): Promise<Role | null> {
-    if (!id || id <= 0) {
+  async updateRole(id: string, roleData: UpdateRoleDto): Promise<Role | null> {
+    if (!id) {
       throw new Error('Invalid role ID');
     }
 
@@ -42,8 +42,8 @@ export class RoleService {
     return this.roleRepository.update(id, roleData);
   }
 
-  async deleteRole(id: number): Promise<boolean> {
-    if (!id || id <= 0) {
+  async deleteRole(id: string): Promise<boolean> {
+    if (!id) {
       throw new Error('Invalid role ID');
     }
 

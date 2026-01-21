@@ -1,5 +1,5 @@
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   createdAt?: Date;
@@ -29,9 +29,9 @@ export interface UpdateUserDto {
 
 export interface UserRepository {
   findAll(): Promise<User[]>;
-  findById(id: number): Promise<User | null>;
+  findById(id: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   create(user: CreateUserDto): Promise<User>;
-  update(id: number, user: UpdateUserDto): Promise<User | null>;
-  delete(id: number): Promise<boolean>;
+  update(id: string, user: UpdateUserDto): Promise<User | null>;
+  delete(id: string): Promise<boolean>;
 } 

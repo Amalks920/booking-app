@@ -1,9 +1,9 @@
 export interface Role {
-  id: number;
+  id: string;
   role: string;
   code: string;
-  created_by: number;
-  updated_by: number;
+  created_by: string;
+  updated_by: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -11,8 +11,8 @@ export interface Role {
 export interface CreateRoleDto {
   role: string;
   code: string;
-  created_by: number;
-  updated_by: number;
+  created_by: string;
+  updated_by: string;
 }
 
 export interface UpdateRoleDto {
@@ -22,8 +22,8 @@ export interface UpdateRoleDto {
 
 export interface RoleRepository {
   findAll(): Promise<Role[]>;
-  findById(id: number): Promise<Role | null>;
+  findById(id: string): Promise<Role | null>;
   create(roleData: CreateRoleDto): Promise<Role>;
-  update(id: number, roleData: UpdateRoleDto): Promise<Role | null>;
-  delete(id: number): Promise<boolean>;
+  update(id: string, roleData: UpdateRoleDto): Promise<Role | null>;
+  delete(id: string): Promise<boolean>;
 } 
