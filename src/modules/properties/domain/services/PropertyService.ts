@@ -15,12 +15,12 @@ export class PropertyService {
     return this.propertyRepository.findById(id);
   }
 
-  async createProperty(propertyData: CreatePropertyDto): Promise<Property> {
+  async createProperty(propertyData: CreatePropertyDto, user_id: string): Promise<Property> {
     if (!propertyData.property_name || !propertyData.address || !propertyData.city || !propertyData.state) {
       throw new Error('Property name, address, city, and state are required');
     }
 
-    return this.propertyRepository.create(propertyData);
+    return this.propertyRepository.create(propertyData, user_id);
   }
 
   async updateProperty(id: string, propertyData: UpdatePropertyDto): Promise<Property | null> {

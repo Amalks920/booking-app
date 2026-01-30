@@ -30,7 +30,7 @@ const options: swaggerJsdoc.Options = {
       schemas: {
         User: {
           type: 'object',
-          required: ['id', 'name', 'email', 'first_name', 'last_name', 'country_code', 'phone_number', 'role'],
+          required: ['id', 'name', 'email', 'firstName', 'lastName', 'countryCode', 'phoneNumber', 'role'],
           properties: {
             id: {
               type: 'integer',
@@ -45,19 +45,19 @@ const options: swaggerJsdoc.Options = {
               format: 'email',
               description: 'Email address of the user'
             },
-            first_name: {
+            firstName: {
               type: 'string',
               description: 'First name of the user'
             },
-            last_name: {
+            lastName: {
               type: 'string',
               description: 'Last name of the user'
             },
-            country_code: {
+            countryCode: {
               type: 'string',
               description: 'Country code (e.g., +1, +44)'
             },
-            phone_number: {
+            phoneNumber: {
               type: 'string',
               description: 'Phone number of the user'
             },
@@ -101,19 +101,19 @@ const options: swaggerJsdoc.Options = {
               format: 'email',
               description: 'Email address of the user'
             },
-            first_name: {
+            firstName: {
               type: 'string',
               description: 'First name of the user'
             },
-            last_name: {
+            lastName: {
               type: 'string',
               description: 'Last name of the user'
             },
-            country_code: {
+            countryCode: {
               type: 'string',
               description: 'Country code (e.g., +1, +44)'
             },
-            phone_number: {
+            phoneNumber: {
               type: 'string',
               description: 'Phone number of the user'
             },
@@ -142,7 +142,7 @@ const options: swaggerJsdoc.Options = {
         },
         CreateUserRequest: {
           type: 'object',
-          required: ['name', 'email','password','role','first_name','last_name','country_code','phone_number'],
+          required: ['name', 'email','password','role','firstName','lastName','countryCode','phoneNumber'],
           properties: {
             name: {
               type: 'string',
@@ -163,19 +163,19 @@ const options: swaggerJsdoc.Options = {
               format:'uuid',
               description:'UUID of the role assigned to the user'
             },
-            first_name: {
+            firstName: {
               type: 'string',
               description: 'First name of the user'
             },
-            last_name: {
+            lastName: {
               type: 'string',
               description: 'Last name of the user'
             },
-            country_code: {
+            countryCode: {
               type: 'string',
               description: 'Country code (e.g., +1, +44)'
             },
-            phone_number: {
+            phoneNumber: {
               type: 'string',
               description: 'Phone number of the user'
             }
@@ -193,19 +193,19 @@ const options: swaggerJsdoc.Options = {
               format: 'email',
               description: 'Email address of the user'
             },
-            first_name: {
+            firstName: {
               type: 'string',
               description: 'First name of the user'
             },
-            last_name: {
+            lastName: {
               type: 'string',
               description: 'Last name of the user'
             },
-            country_code: {
+            countryCode: {
               type: 'string',
               description: 'Country code (e.g., +1, +44)'
             },
-            phone_number: {
+            phoneNumber: {
               type: 'string',
               description: 'Phone number of the user'
             },
@@ -451,6 +451,32 @@ const options: swaggerJsdoc.Options = {
             has_private_bathroom: { type: 'boolean', description: 'Whether the room has a private bathroom' }
           }
         },
+        Amenity: {
+          type: 'object',
+          required: ['id', 'name', 'description'],
+          properties: {
+            id: { type: 'string', description: 'Unique identifier for the amenity' },
+            name: { type: 'string', description: 'Name of the amenity' },
+            description: { type: 'string', description: 'Description of the amenity' },
+            created_at: { type: 'string', format: 'date-time', description: 'Creation timestamp' },
+            updated_at: { type: 'string', format: 'date-time', description: 'Last update timestamp' }
+          }
+        },
+        CreateAmenityRequest: {
+          type: 'object',
+          required: ['name', 'description'],
+          properties: {
+            name: { type: 'string', description: 'Name of the amenity' },
+            description: { type: 'string', description: 'Description of the amenity' }
+          }
+        },
+        UpdateAmenityRequest: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', description: 'Name of the amenity' },
+            description: { type: 'string', description: 'Description of the amenity' }
+          }
+        },
         Error: {
           type: 'object',
           properties: {
@@ -532,6 +558,10 @@ const options: swaggerJsdoc.Options = {
       {
         name: 'Rooms',
         description: 'Room management endpoints'
+      },
+      {
+        name: 'Amenities',
+        description: 'Amenity management endpoints'
       }
     ]
   },

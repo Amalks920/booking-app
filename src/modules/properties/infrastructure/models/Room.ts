@@ -5,13 +5,13 @@ export interface RoomAttributes {
   id: string;
   property_id: string;
   name: string;
-  type: string;
-  description?: string;
+  room_type: string;
+  description: string;
   capacity: number;
+  room_number: number;
   beds: string;
   price_per_night: number;
-  currency: string;
-  status: 'available' | 'booked' | 'maintenance';
+  status: 'available' | 'booked' | 'maintenance' | 'pending';
   floor_number?: number;
   size_sq_m?: number;
   view_type?: string;
@@ -42,18 +42,18 @@ export class RoomModel
   public id!: string;
   public property_id!: string;
   public name!: string;
-  public type!: string;
-  public description?: string;
+  public room_type!: string;
+  public description!: string;
   public capacity!: number;
   public beds!: string;
   public price_per_night!: number;
-  public currency!: string;
   public status!: 'available' | 'booked' | 'maintenance';
   public floor_number?: number;
   public size_sq_m?: number;
   public view_type?: string;
   public is_smoking_allowed!: boolean;
   public has_private_bathroom!: boolean;
+  public room_number!: number;
   public created_by!: string;
   public updated_by!: string;
   public readonly created_at!: Date;
@@ -76,12 +76,18 @@ RoomModel.init(
       },
       onDelete: 'CASCADE',
     },
+
     name: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    type: {
+
+    room_type: {
       type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    room_number: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     description: {
@@ -100,14 +106,10 @@ RoomModel.init(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-    currency: {
-      type: DataTypes.STRING(3),
-      allowNull: false,
-    },
     status: {
-      type: DataTypes.ENUM('available', 'booked', 'maintenance'),
+      type: DataTypes.ENUM('available', 'booked', 'maintenance', 'pending'),
       allowNull: false,
-      defaultValue: 'available',
+      defaultValue: 'pending',
     },
     floor_number: {
       type: DataTypes.INTEGER,
@@ -155,6 +157,13 @@ RoomModel.init(
     tableName: 'rooms',
     modelName: 'Room',
     timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ['property_id', 'room_number'],
+        name: 'unique_property_room_number',
+      },
+    ],
   }
 );
 
@@ -162,7 +171,7 @@ RoomModel.init(
 // This function must be called after all related models are initialized
 export function defineRoomAssociations() {
   const PropertyModel = require('./Property').default;
-  const Amenity = require('./Amenities').default;
+  const Amenity = require('./Amenity').default;
   const RoomAmenity = require('./RoomAmenities').default;
 
   RoomModel.belongsToMany(Amenity, {

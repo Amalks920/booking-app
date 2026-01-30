@@ -6,6 +6,7 @@ export interface UserAttributes {
   id: string;
   name: string;
   email: string;
+  isDeleted?:string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -18,6 +19,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public id!: string;
   public name!: string;
   public email!: string;
+  isDeleted!:string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -46,6 +48,10 @@ User.init(
         notEmpty: true,
         isEmail: true
       }
+    },
+    isDeleted:{
+       type: DataTypes.BOOLEAN,
+       defaultValue:false
     },
     createdAt: {
       type: DataTypes.DATE,

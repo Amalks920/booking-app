@@ -51,7 +51,7 @@ export class PropertyRepositoryImpl implements IPropertyRepository {
     );
   }
 
-  async create(propertyData: CreatePropertyDto): Promise<Property> {
+  async create(propertyData: CreatePropertyDto, user_id: string): Promise<Property> {
     const newProperty = await PropertyModel.create({
       property_name: propertyData.property_name,
       description: propertyData.description,
@@ -64,9 +64,9 @@ export class PropertyRepositoryImpl implements IPropertyRepository {
       latitude: propertyData.latitude,
       longitude: propertyData.longitude,
       contact_number: propertyData.contact_number,
-      status: propertyData.status,
-      created_by: propertyData.created_by,
-      updated_by: propertyData.updated_by
+      status: propertyData.status || 'pending',
+      created_by: user_id,
+      updated_by: user_id
     });
 
     return new Property(

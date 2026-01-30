@@ -14,21 +14,20 @@ export class Room {
 
 // DTOs
 export interface CreateRoomDto {
-  id?: string;
+  property_id: string;
   name: string;
   description: string;
-  created_by: string;
-  updated_by: string;
-  // Required by persistence model
-  property_id: string;
-  type: string;
+  room_type: string;
   capacity: number;
+  room_number: number;
   beds: string;
+  status?: 'available' | 'booked' | 'maintenance' | 'pending';
+  floor_number?: number;
+  size_sq_m?: number;
+  view_type?: string;
   price_per_night: number;
-  currency: string;
   is_smoking_allowed: boolean;
   has_private_bathroom: boolean;
-  status?: 'available' | 'booked' | 'maintenance';
 }
 
 export interface UpdateRoomDto {
@@ -41,7 +40,7 @@ export interface UpdateRoomDto {
 export interface IRoomRepository {
   findAll(): Promise<Room[]>;
   findById(id: number): Promise<Room | null>;
-  create(roomData: CreateRoomDto): Promise<Room>;
+  create(roomData: CreateRoomDto, user_id: string): Promise<Room>;
   update(id: string, roomData: UpdateRoomDto): Promise<Room | null>;
   delete(id: string): Promise<boolean>;
 }

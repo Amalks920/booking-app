@@ -31,21 +31,21 @@ export class RoomRepositoryImpl implements IRoomRepository {
     );
   }
 
-  async create(roomData: CreateRoomDto): Promise<Room> {
+  async create(roomData: CreateRoomDto, user_id: string): Promise<Room> {
     const newRoom = await RoomModel.create({
       property_id: roomData.property_id,
       name: roomData.name,
-      type: roomData.type,
+      room_type: roomData.room_type,
       description: roomData.description,
       capacity: roomData.capacity,
       beds: roomData.beds,
+      room_number: roomData.room_number,
       price_per_night: roomData.price_per_night,
-      currency: roomData.currency,
       status: roomData.status ?? 'available',
       is_smoking_allowed: roomData.is_smoking_allowed,
       has_private_bathroom: roomData.has_private_bathroom,
-      created_by: roomData.created_by,
-      updated_by: roomData.updated_by
+      created_by: user_id,
+      updated_by: user_id
     });
 
     return new Room(

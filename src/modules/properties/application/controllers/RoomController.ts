@@ -1,3 +1,4 @@
+import { AuthenticatedRequest } from "../../../../types";
 import { RoomService } from "../../domain/services/RoomService";
 import { Request, Response } from "express";
 export class RoomController {
@@ -43,9 +44,11 @@ export class RoomController {
   async createRoom(req: Request, res: Response): Promise<void> {
     try {
       const roomData = req.body;
-      const room = await this.roomService.createRoom(roomData);
+      const user_id = (req as AuthenticatedRequest).user?.id || '';
+      const room = await this.roomService.createRoom(roomData, user_id);
       res.json(room);
     } catch (error) {
+      console.error(error);
       res.status(500).json({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'

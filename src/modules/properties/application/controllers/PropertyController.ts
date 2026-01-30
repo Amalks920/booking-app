@@ -1,6 +1,7 @@
 // modules/property/application/controllers/PropertyController.ts
 import { Request, Response } from 'express';
 import { PropertyService } from '../../domain/services/PropertyService';
+import { AuthenticatedRequest } from '../../../../types';
 
 export class PropertyController {
   constructor(private propertyService: PropertyService) {}
@@ -50,13 +51,15 @@ export class PropertyController {
   async createProperty(req: Request, res: Response): Promise<void> {
     try {
       const propertyData = req.body;
-      const property = await this.propertyService.createProperty(propertyData);
+      const user_id = (req as AuthenticatedRequest).user?.id || '';
+      const property = await this.propertyService.createProperty(propertyData,user_id);
 
       res.status(201).json({
         message: 'Property created successfully',
         property
       });
     } catch (error) {
+      console.log(error);
       if (error instanceof Error && error.message.includes('required')) {
         res.status(400).json({ error: 'Validation error', message: error.message });
         return;

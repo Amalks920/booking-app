@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { PropertyController } from '../../application/controllers/PropertyController';
 import { PropertyService } from '../../domain/services/PropertyService';
 import { PropertyRepositoryImpl } from '../repositories/PropertyRepositoryImpl';
-import { authenticateToken } from '../../../../shared/middleware/authMiddleware';
+import { authenticateUser } from '../../../../shared/middleware/authMiddleware';
 import { validateBody } from '../../../../shared/validation/validateBody';
 import { createPropertySchema } from '../../validators/propertySchema';
 
@@ -123,7 +123,7 @@ const propertyController = new PropertyController(propertyService);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */ 
-    router.get('/',authenticateToken, (req, res) => propertyController.getAllProperties(req, res));
+    router.get('/',authenticateUser, (req, res) => propertyController.getAllProperties(req, res));
 
 /**
  * @swagger
@@ -291,7 +291,7 @@ router.get('/:id', (req, res) => propertyController.getPropertyById(req, res));
  */
 router.post('/',
     validateBody(createPropertySchema),
-    authenticateToken, (req, res) => propertyController.createProperty(req, res));
+    authenticateUser, (req, res) => propertyController.createProperty(req, res));
 
 /**
  * @swagger

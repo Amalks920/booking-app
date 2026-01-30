@@ -4,9 +4,9 @@ import User from '../../../users/infrastructure/models/User';
 import PropertyModel from '../../../properties/infrastructure/models/Property';
 
 export interface BookingAttributes {
-  id: number;
-  user_id: number;
-  property_id: number;
+  id: string;
+  user_id: string;
+  property_id: string;
   check_in_date: Date;
   check_out_date: Date;
   total_amount: number;
@@ -18,9 +18,9 @@ export interface BookingAttributes {
 export interface BookingCreationAttributes extends Optional<BookingAttributes, 'id' | 'created_at' | 'updated_at'> {}
 
 export class Booking extends Model<BookingAttributes, BookingCreationAttributes> implements BookingAttributes {
-  public id!: number;
-  public user_id!: number;
-  public property_id!: number;
+  public id!: string;
+  public user_id!: string;
+  public property_id!: string;
   public check_in_date!: Date;
   public check_out_date!: Date;
   public total_amount!: number;
@@ -32,12 +32,12 @@ export class Booking extends Model<BookingAttributes, BookingCreationAttributes>
 Booking.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'users',

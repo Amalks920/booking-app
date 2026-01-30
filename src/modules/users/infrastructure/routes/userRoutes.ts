@@ -75,7 +75,7 @@ const userController = new UserController(userService);
  *           type: string
  *           enum: [active, inactive, suspended, all]
  *           default: active
- *         description: Filter by user status (default: active users only)
+ *         description: "Filter by user status (default: active users only)"
  *         example: "active"
  *       - in: query
  *         name: sort_by
@@ -313,7 +313,7 @@ router.get('/:id', (req, res) => userController.getUserById(req, res));
 
 /**
  * @swagger
- * /api/v1/users/create:
+ * /api/v1/users:
  *   post:
  *     summary: Create a new user
  *     description: |
@@ -342,10 +342,10 @@ router.get('/:id', (req, res) => userController.getUserById(req, res));
  *             email: "amal@example.com"
  *             password: "Amal@123"
  *             role: "3dskjf48-4389-89ir-i949-123456789abc"
- *             first_name: "Amal"
- *             last_name: "KS"
- *             country_code: "+1"
- *             phone_number: "5551234567"
+ *             firstName: "Amal"
+ *             lastName: "KS"
+ *             countryCode: "+1"
+ *             phoneNumber: "5551234567"
  *     responses:
  *       201:
  *         description: User created successfully
@@ -385,7 +385,7 @@ router.get('/:id', (req, res) => userController.getUserById(req, res));
  *                     message: "Email is required"
  *                   - field: "password"
  *                     message: "Password must be at least 8 characters with uppercase, lowercase, number, and special character"
- *                   - field: "phone_number"
+ *                   - field: "phoneNumber"
  *                     message: "Phone number is invalid for country code +1"
  *                   - field: "role"
  *                     message: "Role UUID is invalid or does not exist"
@@ -445,8 +445,8 @@ router.get('/:id', (req, res) => userController.getUserById(req, res));
  *                 details: []
  *               timestamp: "2025-01-15T12:00:00.000Z"
  */
-router.post('/create',
-     validateBody(createUserSchema), 
+router.post('/',
+     validateBody(createUserSchema),
      (req, res) => userController.createUser(req, res));
 
 /**
@@ -956,7 +956,7 @@ router.delete('/:id', (req, res) => userController.deleteUser(req, res));
  */
 router.post('/refresh-tokens', (req, res) => userController.refreshTokens(req, res));
 
-export default router; 
+export default router;
 
 
 

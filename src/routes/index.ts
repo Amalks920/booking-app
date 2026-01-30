@@ -3,6 +3,8 @@ import { userRoutes } from '../modules/users';
 import { roleRoutes } from '../modules/users';
 import { propertyRoutes } from '../modules/properties';
 import { roomRoutes } from '../modules/properties';
+import { amenityRoutes } from '../modules/properties';
+
 const router = Router();
 
 // Mount module routes
@@ -10,6 +12,7 @@ router.use('/users', userRoutes);
 router.use('/roles', roleRoutes);
 router.use('/properties', propertyRoutes);
 router.use('/rooms', roomRoutes);
+router.use('/amenities', amenityRoutes);
 /**
  * @swagger
  * /api/v1:

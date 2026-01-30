@@ -7,11 +7,10 @@ import { defineUserProfileAssociations } from '../modules/users/infrastructure/m
 // Import property models
 import '../modules/properties/infrastructure/models/Property';
 import '../modules/properties/infrastructure/models/Room';
-import '../modules/properties/infrastructure/models/Amenities';
+import '../modules/properties/infrastructure/models/Amenity';
 import '../modules/properties/infrastructure/models/RoomAmenities';
 import { definePropertyAssociations } from '../modules/properties/infrastructure/models/Property';
 import { defineRoomAssociations } from '../modules/properties/infrastructure/models/Room';
-import { defineAmenityAssociations } from '../modules/properties/infrastructure/models/Amenities';
 
 export const initializeDatabase = async (): Promise<void> => {
   try {
@@ -25,10 +24,10 @@ export const initializeDatabase = async (): Promise<void> => {
     // Define property module associations
     definePropertyAssociations();
     defineRoomAssociations();
-    defineAmenityAssociations();
 
     // Sync all models with the database (dev only)
     // In production, you should use migrations instead of sync
+ 
     if (process.env['NODE_ENV'] === 'development') {
       const syncMode = process.env['DB_SYNC_MODE'] || 'alter';
       const syncOptions =
@@ -52,4 +51,4 @@ export const closeDatabase = async (): Promise<void> => {
   } catch (error) {
     console.error('❌ Error closing database connection:', error);
   }
-}; 
+};

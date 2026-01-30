@@ -15,9 +15,9 @@ export interface PropertyAttributes {
     latitude: number;
     longitude: number;
     contact_number: string;
-    status: 'active' | 'inactive';  // enum-style status
-    created_by: number;
-    updated_by: number;
+    status: 'active' | 'inactive' | 'pending';  // enum-style status
+    created_by: string;
+    updated_by: string;
     created_at?: Date;
     updated_at?: Date;
   }
@@ -39,9 +39,9 @@ export interface PropertyAttributes {
     public latitude!: number;
     public longitude!: number;
     public contact_number!: string;
-    public status!: 'active' | 'inactive';
-    public created_by!: number;
-    public updated_by!: number;
+    public status!: 'active' | 'inactive' | 'pending';
+    public created_by!: string;
+    public updated_by!: string;
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
   }
@@ -99,16 +99,16 @@ export interface PropertyAttributes {
         allowNull: true,
       },
       status: {
-        type: DataTypes.ENUM('active', 'inactive'),
+        type: DataTypes.ENUM('active', 'inactive','pending'),
         allowNull: false,
-        defaultValue: 'active',
+        defaultValue: 'pending',
       },
       created_by: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
       },
       updated_by: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
       },
       created_at: {

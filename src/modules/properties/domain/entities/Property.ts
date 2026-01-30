@@ -13,9 +13,9 @@ export class Property {
       public latitude: number,
       public longitude: number,
       public contact_number: string,
-      public status: 'active' | 'inactive',
-      public created_by: number,
-      public updated_by: number,
+      public status: 'active' | 'inactive' | 'pending',
+      public created_by: string,
+      public updated_by: string,
       public created_at?: Date,
       public updated_at?: Date
     ) {}
@@ -34,9 +34,9 @@ export class Property {
     latitude: number;
     longitude: number;
     contact_number: string;
-    status: 'active' | 'inactive';
-    created_by: number;
-    updated_by: number;
+    status?: 'active' | 'inactive' | 'pending';
+    created_by: string;
+    updated_by: string;
   }
   
   export interface UpdatePropertyDto {
@@ -51,14 +51,14 @@ export class Property {
     latitude?: number;
     longitude?: number;
     contact_number?: string;
-    status?: 'active' | 'inactive';
-    updated_by?: number;
+    status?: 'active' | 'inactive' | 'pending';
+    updated_by?: string;
   }
   
   export interface IPropertyRepository {
     findAll(): Promise<Property[]>;
     findById(id: string): Promise<Property | null>;
-    create(propertyData: CreatePropertyDto): Promise<Property>;
+    create(propertyData: CreatePropertyDto, user_id: string): Promise<Property>;
     update(id: string, propertyData: UpdatePropertyDto): Promise<Property | null>;
     delete(id: string): Promise<boolean>;
   }

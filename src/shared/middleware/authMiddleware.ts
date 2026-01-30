@@ -3,9 +3,18 @@ import { jwtVerify, createRemoteJWKSet, JWTPayload, decodeJwt } from 'jose';
 import { getCognitoConfig } from '../../config/cognito';
 import { AuthenticatedRequest } from '../../types';
 import { UserRepository } from '../../modules/users';
+import { UserRepositoryImpl } from '../../modules/users/infrastructure/repositories/UserRepositoryImpl';
 
 // Cache for JWKS to avoid fetching on every request
 let jwks: ReturnType<typeof createRemoteJWKSet> | null = null;
+let defaultUserRepository: UserRepository | null = null;
+
+function getDefaultUserRepository(): UserRepository {
+  if (!defaultUserRepository) {
+    defaultUserRepository = new UserRepositoryImpl();
+  }
+  return defaultUserRepository;
+}
 
 /**
  * Get or create the JWKS client for Cognito token verification
@@ -124,7 +133,6 @@ export function authenticate(
         const issuer = config.issuer || "";
         
         if (isAccessToken) {
-
           // For Access Tokens: verify signature and issuer, but handle audience flexibly
           // Access Tokens have 'client_id' claim that should match our clientId
           const { payload: decodedPayload } = await jwtVerify(token, jwks, {
@@ -132,7 +140,6 @@ export function authenticate(
             // Don't validate audience strictly - Access Tokens may have different aud structure
           });
           payload = decodedPayload;
-          
           // Manually verify client_id matches
           const tokenClientId = payload['client_id'] as string | undefined;
           if (tokenClientId && tokenClientId !== config.clientId) {
@@ -245,7 +252,7 @@ export function authenticate(
             });
             return;
           }
-
+          console.log(user)
           // Attach user to request
           if (user) {
             (req as AuthenticatedRequest).user = user;
@@ -314,7 +321,14 @@ export const authenticateToken = authenticate();
  * Authentication middleware that requires user to exist in database
  * Use this when you need the full user object from database
  */
-export function authenticateWithUser(userRepository: UserRepository) {
-  return authenticate(userRepository, true);
+export function authenticateWithUser(userRepository?: UserRepository) {
+  const repository = userRepository ?? getDefaultUserRepository();
+  return authenticate(repository, true);
 }
+
+/**
+ * Default authentication middleware with DB user lookup
+ * Use this when you want user data attached on every authenticated route
+ */
+export const authenticateUser = authenticateWithUser();
 

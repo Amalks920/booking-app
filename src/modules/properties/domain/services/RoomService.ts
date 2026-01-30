@@ -11,8 +11,8 @@ export class RoomService {
     return this.roomRepository.findById(id);
   }
 
-  async createRoom(roomData: CreateRoomDto): Promise<Room> {
-    return this.roomRepository.create(roomData);
+  async createRoom(roomData: CreateRoomDto, user_id: string): Promise<Room> {
+    return this.roomRepository.create(roomData, user_id);
   }
 
   async updateRoom(id: string, roomData: UpdateRoomDto): Promise<Room | null> {

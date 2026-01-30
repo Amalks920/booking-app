@@ -12,5 +12,5 @@ export const createPropertySchema = z.object({
   latitude: z.number().min(1, 'latitude is required'),
  // longitude: z.number().min(1, 'longitude is required'),
   contact_number: z.string().min(1, 'contact number is required'),
-  status: z.string().min(1, 'status is required'),
+  //status: z.string().min(1, 'status is required'),
 });

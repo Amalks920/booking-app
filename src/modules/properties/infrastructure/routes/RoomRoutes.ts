@@ -2,6 +2,9 @@ import { Router } from "express";
 import { RoomController } from "../../application/controllers/RoomController";
 import { RoomService } from "../../domain/services/RoomService";
 import { RoomRepositoryImpl } from "../repositories/RoomRepositoryImpl";
+import { authenticateUser } from "../../../../shared/middleware/authMiddleware";
+import { validateBody } from '../../../../shared/validation/validateBody';
+import { createRoomSchema } from '../../validators/roomSchema';
 
 const router = Router();
 
@@ -192,17 +195,16 @@ router.get('/:id', (req, res) => roomController.getRoomById(req, res));
  *           example:
  *             name: "Room 1"
  *             description: "Room 1 description"
- *             created_by: "1"
- *             updated_by: "1"
- *             property_id: "1"
- *             type: "Single"
- *             capacity: 1
+ *             property_id: "123e4567-e89b-12d3-a456-426614174000"
+ *             size_sq_m: "100"
+ *             view_type: "Ocean"
+ *             room_type: "Single"
+ *             room_number: "101"
+ *             capacity: "1"
  *             beds: "1"
- *             price_per_night: 100
- *             currency: "USD"
- *             is_smoking_allowed: true
- *             has_private_bathroom: true
- *             status: "available"
+ *             price_per_night: "100"
+ *             is_smoking_allowed: "true"
+ *             has_private_bathroom: "true"            
  *     responses:
  *       200:
  *         description: Room created successfully
@@ -235,7 +237,9 @@ router.get('/:id', (req, res) => roomController.getRoomById(req, res));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', (req, res) => roomController.createRoom(req, res));
+
+
+router.post('/',authenticateUser, validateBody(createRoomSchema), (req, res) => roomController.createRoom(req, res));
 
 
 

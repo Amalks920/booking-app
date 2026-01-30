@@ -298,6 +298,7 @@ export class CognitoService {
 
       const command = new InitiateAuthCommand(authParams);
       const response = await this.client.send(command);
+      console.log(response);
       if (!response.AuthenticationResult) {
         throw new Error('Authentication failed: No authentication result returned');
       }
