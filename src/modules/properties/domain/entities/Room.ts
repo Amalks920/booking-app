@@ -9,7 +9,7 @@ export class Room {
     public updated_by: string,
     public created_at?: Date,
     public updated_at?: Date
-  ) {}
+  ) { }
 }
 
 // DTOs
@@ -17,7 +17,6 @@ export interface CreateRoomDto {
   property_id: string;
   name: string;
   description: string;
-  room_type: string;
   capacity: number;
   room_number: number;
   beds: string;
@@ -28,6 +27,10 @@ export interface CreateRoomDto {
   price_per_night: number;
   is_smoking_allowed: boolean;
   has_private_bathroom: boolean;
+  max_adult_count: number;
+  max_children_under_3_count: number;
+  max_children_3_to_12_count: number;
+  max_children_13_to_17_count: number;
 }
 
 export interface UpdateRoomDto {
@@ -44,4 +47,3 @@ export interface IRoomRepository {
   update(id: string, roomData: UpdateRoomDto): Promise<Room | null>;
   delete(id: string): Promise<boolean>;
 }
-  

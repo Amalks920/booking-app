@@ -35,7 +35,6 @@ export class RoomRepositoryImpl implements IRoomRepository {
     const newRoom = await RoomModel.create({
       property_id: roomData.property_id,
       name: roomData.name,
-      room_type: roomData.room_type,
       description: roomData.description,
       capacity: roomData.capacity,
       beds: roomData.beds,
@@ -44,6 +43,10 @@ export class RoomRepositoryImpl implements IRoomRepository {
       status: roomData.status ?? 'available',
       is_smoking_allowed: roomData.is_smoking_allowed,
       has_private_bathroom: roomData.has_private_bathroom,
+      max_adult_count: roomData.max_adult_count,
+      max_children_under_3_count: roomData.max_children_under_3_count,
+      max_children_3_to_12_count: roomData.max_children_3_to_12_count,
+      max_children_13_to_17_count: roomData.max_children_13_to_17_count,
       created_by: user_id,
       updated_by: user_id
     });

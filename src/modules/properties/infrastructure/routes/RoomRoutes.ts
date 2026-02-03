@@ -52,7 +52,7 @@ const roomController = new RoomController(roomService);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
- */ 
+ */
 router.get('/', (req, res) => roomController.getAllRooms(req, res));
 
 /**
@@ -96,9 +96,12 @@ router.get('/', (req, res) => roomController.getAllRooms(req, res));
  *                 id: "1"
  *                 property_id: "1"
  *                 name: "Deluxe Ocean View Suite"
- *                 type: "Suite"
- *                 description: "Spacious suite with stunning ocean views, perfect for a relaxing getaway"
- *                 capacity: 2
+                description: "Spacious suite with stunning ocean views, perfect for a relaxing getaway"
+                capacity: 2
+                max_adult_count: 2
+                max_children_under_3_count: 1
+                max_children_3_to_12_count: 1
+                max_children_13_to_17_count: 0
  *                 beds: "1 King Bed"
  *                 price_per_night: 250.00
  *                 currency: "USD"
@@ -198,9 +201,12 @@ router.get('/:id', (req, res) => roomController.getRoomById(req, res));
  *             property_id: "123e4567-e89b-12d3-a456-426614174000"
  *             size_sq_m: "100"
  *             view_type: "Ocean"
- *             room_type: "Single"
  *             room_number: "101"
  *             capacity: "1"
+ *             max_adult_count: 2
+ *             max_children_under_3_count: 1
+ *             max_children_3_to_12_count: 0
+ *             max_children_13_to_17_count: 0
  *             beds: "1"
  *             price_per_night: "100"
  *             is_smoking_allowed: "true"
@@ -239,7 +245,7 @@ router.get('/:id', (req, res) => roomController.getRoomById(req, res));
  */
 
 
-router.post('/',authenticateUser, validateBody(createRoomSchema), (req, res) => roomController.createRoom(req, res));
+router.post('/', authenticateUser, validateBody(createRoomSchema), (req, res) => roomController.createRoom(req, res));
 
 
 
@@ -268,18 +274,21 @@ router.post('/',authenticateUser, validateBody(createRoomSchema), (req, res) => 
  *             $ref: '#/components/schemas/UpdateRoomRequest'
  *           example:
  *             name: "Room 1 Updated"
- *             type: "Double"
- *             description: "Updated room description"
- *             capacity: 2
- *             beds: "1 Queen Bed"
- *             price_per_night: 150.00
- *             currency: "USD"
- *             status: "available"
- *             floor_number: 3
- *             size_sq_m: 25.5
- *             view_type: "Ocean"
- *             is_smoking_allowed: false
- *             has_private_bathroom: true
+             description: "Updated room description"
+             capacity: 2
+             max_adult_count: 2
+             max_children_under_3_count: 1
+             max_children_3_to_12_count: 1
+             max_children_13_to_17_count: 0
+             beds: "1 Queen Bed"
+             price_per_night: 150.00
+             currency: "USD"
+             status: "available"
+             floor_number: 3
+             size_sq_m: 25.5
+             view_type: "Ocean"
+             is_smoking_allowed: false
+             has_private_bathroom: true
  *     responses:
  *       200:
  *         description: Room updated successfully
@@ -318,7 +327,7 @@ router.post('/',authenticateUser, validateBody(createRoomSchema), (req, res) => 
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id',(req,res)=> roomController.updateRoom(req,res))
+router.put('/:id', (req, res) => roomController.updateRoom(req, res))
 
 /**
  * @swagger
@@ -380,7 +389,7 @@ router.put('/:id',(req,res)=> roomController.updateRoom(req,res))
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id',(req,res)=> roomController.deleteRoom(req,res))
+router.delete('/:id', (req, res) => roomController.deleteRoom(req, res))
 
 
 export default router;

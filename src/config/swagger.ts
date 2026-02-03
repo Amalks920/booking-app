@@ -84,7 +84,7 @@ const options: swaggerJsdoc.Options = {
             }
           }
         },
-        Auth:{
+        Auth: {
           type: 'object',
           required: ['id', 'name', 'email', 'first_name', 'last_name', 'country_code', 'phone_number', 'role'],
           properties: {
@@ -142,7 +142,7 @@ const options: swaggerJsdoc.Options = {
         },
         CreateUserRequest: {
           type: 'object',
-          required: ['name', 'email','password','role','firstName','lastName','countryCode','phoneNumber'],
+          required: ['name', 'email', 'password', 'role', 'firstName', 'lastName', 'countryCode', 'phoneNumber'],
           properties: {
             name: {
               type: 'string',
@@ -153,15 +153,15 @@ const options: swaggerJsdoc.Options = {
               format: 'email',
               description: 'Email address of the user'
             },
-            password:{
-              type:'string',
-              format:'password',
-              description:"password of the user"
+            password: {
+              type: 'string',
+              format: 'password',
+              description: "password of the user"
             },
-            role:{
-              type:'string',
-              format:'uuid',
-              description:'UUID of the role assigned to the user'
+            role: {
+              type: 'string',
+              format: 'uuid',
+              description: 'UUID of the role assigned to the user'
             },
             firstName: {
               type: 'string',
@@ -373,7 +373,7 @@ const options: swaggerJsdoc.Options = {
             updated_at: { type: 'string', format: 'date-time', description: 'Last update timestamp' }
           }
         },
-        
+
         CreatePropertyRequest: {
           type: 'object',
           required: ['property_name', 'address', 'city', 'state', 'country', 'created_by', 'updated_by'],
@@ -394,7 +394,7 @@ const options: swaggerJsdoc.Options = {
             updated_by: { type: 'integer', description: 'Updater user ID' }
           }
         },
-        
+
         UpdatePropertyRequest: {
           type: 'object',
           properties: {
@@ -420,8 +420,11 @@ const options: swaggerJsdoc.Options = {
             name: { type: 'string', description: 'Name of the room' },
             description: { type: 'string', description: 'Room description' },
             property_id: { type: 'string', description: 'ID of the property this room belongs to' },
-            type: { type: 'string', description: 'Type of room (e.g., single, double, suite)' },
             capacity: { type: 'integer', description: 'Maximum number of guests the room can accommodate' },
+            max_adult_count: { type: 'integer', description: 'Maximum number of adults' },
+            max_children_under_3_count: { type: 'integer', description: 'Maximum number of children under 3' },
+            max_children_3_to_12_count: { type: 'integer', description: 'Maximum number of children 3-12' },
+            max_children_13_to_17_count: { type: 'integer', description: 'Maximum number of children 13-17' },
             beds: { type: 'string', description: 'Description of beds in the room' },
             price_per_night: { type: 'number', format: 'float', description: 'Price per night for the room' },
             currency: { type: 'string', description: 'Currency code (e.g., USD, EUR)' },
@@ -437,9 +440,12 @@ const options: swaggerJsdoc.Options = {
           properties: {
             property_id: { type: 'string', description: 'ID of the property this room belongs to' },
             name: { type: 'string', description: 'Name of the room' },
-            type: { type: 'string', description: 'Type of room (e.g., single, double, suite)' },
             description: { type: 'string', description: 'Room description' },
             capacity: { type: 'integer', description: 'Maximum number of guests the room can accommodate' },
+            max_adult_count: { type: 'integer', description: 'Maximum number of adults' },
+            max_children_under_3_count: { type: 'integer', description: 'Maximum number of children under 3' },
+            max_children_3_to_12_count: { type: 'integer', description: 'Maximum number of children 3-12' },
+            max_children_13_to_17_count: { type: 'integer', description: 'Maximum number of children 13-17' },
             beds: { type: 'string', description: 'Description of beds in the room' },
             price_per_night: { type: 'number', format: 'float', description: 'Price per night for the room' },
             currency: { type: 'string', description: 'Currency code (e.g., USD, EUR)' },

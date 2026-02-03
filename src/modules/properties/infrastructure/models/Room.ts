@@ -5,7 +5,6 @@ export interface RoomAttributes {
   id: string;
   property_id: string;
   name: string;
-  room_type: string;
   description: string;
   capacity: number;
   room_number: number;
@@ -17,6 +16,10 @@ export interface RoomAttributes {
   view_type?: string;
   is_smoking_allowed: boolean;
   has_private_bathroom: boolean;
+  max_adult_count: number;
+  max_children_under_3_count: number;
+  max_children_3_to_12_count: number;
+  max_children_13_to_17_count: number;
   created_by: string;
   updated_by: string;
   created_at?: Date;
@@ -33,16 +36,18 @@ export interface RoomCreationAttributes
     | 'view_type'
     | 'created_at'
     | 'updated_at'
-  > {}
+    | 'max_adult_count'
+    | 'max_children_under_3_count'
+    | 'max_children_3_to_12_count'
+    | 'max_children_13_to_17_count'
+  > { }
 
 export class RoomModel
   extends Model<RoomAttributes, RoomCreationAttributes>
-  implements RoomAttributes
-{
+  implements RoomAttributes {
   public id!: string;
   public property_id!: string;
   public name!: string;
-  public room_type!: string;
   public description!: string;
   public capacity!: number;
   public beds!: string;
@@ -54,6 +59,10 @@ export class RoomModel
   public is_smoking_allowed!: boolean;
   public has_private_bathroom!: boolean;
   public room_number!: number;
+  public max_adult_count!: number;
+  public max_children_under_3_count!: number;
+  public max_children_3_to_12_count!: number;
+  public max_children_13_to_17_count!: number;
   public created_by!: string;
   public updated_by!: string;
   public readonly created_at!: Date;
@@ -82,10 +91,6 @@ RoomModel.init(
       allowNull: false,
     },
 
-    room_type: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
     room_number: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -132,6 +137,26 @@ RoomModel.init(
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true,
+    },
+    max_adult_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 2,
+    },
+    max_children_under_3_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    max_children_3_to_12_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    max_children_13_to_17_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
     created_by: {
       type: DataTypes.UUID,
@@ -184,6 +209,12 @@ export function defineRoomAssociations() {
   RoomModel.belongsTo(PropertyModel, {
     foreignKey: 'property_id',
     as: 'property',
+  });
+
+  const BedModel = require('./Bed').default;
+  RoomModel.hasMany(BedModel, {
+    foreignKey: 'room_id',
+    as: 'beds_configuration',
   });
 }
 
