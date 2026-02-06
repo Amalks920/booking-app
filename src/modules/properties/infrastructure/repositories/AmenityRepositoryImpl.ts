@@ -31,11 +31,11 @@ export class AmenityRepositoryImpl implements IAmenityRepository {
   }
 
   async create(amenityData: CreateAmenityDto, user_id: string): Promise<Amenity> {
-    console.log(user_id,'user_id in create');
+    console.log(user_id, 'user_id in create');
     console.log(amenityData)
-    let newAmenity:any={}
+    let newAmenity: any = {}
     try {
-       newAmenity = await AmenityModel.create({
+      newAmenity = await AmenityModel.create({
         name: amenityData.name,
         description: amenityData.description,
         created_by: user_id,
@@ -44,8 +44,7 @@ export class AmenityRepositoryImpl implements IAmenityRepository {
     } catch (error) {
       console.log(error)
     }
-    console.log('++====================================>')
-    console.log(newAmenity)
+
     return {
       id: newAmenity?.id,
       name: newAmenity?.name,

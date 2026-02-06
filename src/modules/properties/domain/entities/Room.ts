@@ -45,5 +45,6 @@ export interface IRoomRepository {
   findById(id: number): Promise<Room | null>;
   create(roomData: CreateRoomDto, user_id: string): Promise<Room>;
   update(id: string, roomData: UpdateRoomDto): Promise<Room | null>;
+  findPrice(id: string): Promise<number>;
   delete(id: string): Promise<boolean>;
 }

@@ -12,7 +12,7 @@ export interface Booking {
 
 export interface CreateBookingDto {
   user_id: string;
-  property_id: number;
+  property_id: string;
   check_in_date: Date;
   check_out_date: Date;
   total_amount: number;
@@ -26,12 +26,12 @@ export interface UpdateBookingDto {
   status?: 'pending' | 'confirmed' | 'cancelled' | 'completed';
 }
 
-export interface BookingRepository {
+export interface IBookingRepository {
   findAll(): Promise<Booking[]>;
-  findById(id: number): Promise<Booking | null>;
-  findByUserId(userId: number): Promise<Booking[]>;
-  findByPropertyId(propertyId: number): Promise<Booking[]>;
+  findById(id: string): Promise<Booking | null>;
+  findByUserId(userId: string): Promise<Booking[]>;
+  findByPropertyId(propertyId: string): Promise<Booking[]>;
   create(booking: CreateBookingDto): Promise<Booking>;
-  update(id: number, booking: UpdateBookingDto): Promise<Booking | null>;
-  delete(id: number): Promise<boolean>;
+  update(id: string, booking: UpdateBookingDto): Promise<Booking | null>;
+  delete(id: string): Promise<boolean>;
 } 

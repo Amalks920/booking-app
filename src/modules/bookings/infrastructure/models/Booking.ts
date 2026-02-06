@@ -15,7 +15,7 @@ export interface BookingAttributes {
   updated_at?: Date;
 }
 
-export interface BookingCreationAttributes extends Optional<BookingAttributes, 'id' | 'created_at' | 'updated_at'> {}
+export interface BookingCreationAttributes extends Optional<BookingAttributes, 'id' | 'created_at' | 'updated_at'> { }
 
 export class Booking extends Model<BookingAttributes, BookingCreationAttributes> implements BookingAttributes {
   public id!: string;
@@ -95,4 +95,30 @@ Booking.belongsTo(PropertyModel, { foreignKey: 'property_id', as: 'property' });
 User.hasMany(Booking, { foreignKey: 'user_id', as: 'bookings' });
 PropertyModel.hasMany(Booking, { foreignKey: 'property_id', as: 'bookings' });
 
-export default Booking; 
+export default Booking;
+
+
+
+/**
+ * USER_INPUT
+ * 
+ * CHECK_IN
+ * CHECK_OUT
+ * NO_OF_ADULTS
+ * NO_OF_CHILDREN
+ * 
+ */
+
+/**
+ * CALCULATE THE PRICE BASED ON CHECKIN,CHECKOUT,NO_OF_PEOPLE
+ * EG:
+ *    FETCH PRICE PER DAY FROM ROOM TABLE
+ *    GET THE NO OF DAYS BETWEEN CHECKIN AND CHECKOUT
+ *    MULTIPLY THE PRICE PER DAY WITH NO OF DAYS
+ *    CREATE A BOOKING IN BOOKING TABLE WITH STATUS PENDING
+ *    DO PAYMENT  USING RAZORPAY
+ *    IF PAYMENT IS SUCCESSFUL
+ *    VERIY THE PAYMENT
+ *    CHANGE THE BOOKING STATUS TO CONFIRMED
+ *    UPDATE THE ROOM STATUS TO BOOKED
+ */

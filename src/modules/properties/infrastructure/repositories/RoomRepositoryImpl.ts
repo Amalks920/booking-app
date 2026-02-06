@@ -31,6 +31,12 @@ export class RoomRepositoryImpl implements IRoomRepository {
     );
   }
 
+  async findPrice(id: string): Promise<number> {
+    const room = await RoomModel.findByPk(id);
+    if (!room) return 0;
+    return room.price_per_night;
+  }
+
   async create(roomData: CreateRoomDto, user_id: string): Promise<Room> {
     const newRoom = await RoomModel.create({
       property_id: roomData.property_id,

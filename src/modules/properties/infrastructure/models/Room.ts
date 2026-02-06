@@ -20,6 +20,7 @@ export interface RoomAttributes {
   max_children_under_3_count: number;
   max_children_3_to_12_count: number;
   max_children_13_to_17_count: number;
+  room_type: string;
   created_by: string;
   updated_by: string;
   created_at?: Date;
@@ -37,6 +38,7 @@ export interface RoomCreationAttributes
     | 'created_at'
     | 'updated_at'
     | 'max_adult_count'
+    | 'room_type'
     | 'max_children_under_3_count'
     | 'max_children_3_to_12_count'
     | 'max_children_13_to_17_count'
@@ -52,7 +54,7 @@ export class RoomModel
   public capacity!: number;
   public beds!: string;
   public price_per_night!: number;
-  public status!: 'available' | 'booked' | 'maintenance';
+  public status!: 'available' | 'booked' | 'maintenance' | 'pending';
   public floor_number?: number;
   public size_sq_m?: number;
   public view_type?: string;
@@ -63,6 +65,7 @@ export class RoomModel
   public max_children_under_3_count!: number;
   public max_children_3_to_12_count!: number;
   public max_children_13_to_17_count!: number;
+  public room_type!: string;
   public created_by!: string;
   public updated_by!: string;
   public readonly created_at!: Date;
@@ -104,6 +107,10 @@ RoomModel.init(
       allowNull: false,
     },
     beds: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    room_type: {
       type: DataTypes.STRING(100),
       allowNull: false,
     },

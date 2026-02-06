@@ -317,3 +317,47 @@ This database setup provides:
 - ✅ **Easy testing and seeding**
 
 The combination of PostgreSQL and Sequelize gives you a robust, scalable database foundation that integrates seamlessly with your Clean Architecture! 🚀 
+
+
+
+
+
+
+
+
+
+
+
+BOOKING
+room_id,
+user_id,
+price (price per day);
+checkin
+checkout
+no_of_people(adults,children seperately);
+
+
+
+
+
+
+
+
+
+type
+size
+no_of_acc
+
+
+
+
+
+
+
+
+
+
+
+
+
+

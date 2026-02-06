@@ -1,16 +1,32 @@
 import { Request, Response } from 'express';
 import { IBookingService } from '../../domain/services/BookingService';
-import { CreateBookingDto } from '../../domain/entities/Booking';
+import { AuthenticatedRequest } from '../../../../types';
 
 export class BookingController {
-  constructor(private readonly bookingService: IBookingService) {}
+  constructor(private readonly bookingService: IBookingService) { }
 
   // Basic CRUD operations
   async createBooking(req: Request, res: Response): Promise<void> {
     try {
-      const bookingData: CreateBookingDto = req.body;
-      const booking = await this.bookingService.createBooking(bookingData);
-      
+      const bookingData = req.body;
+      const user_id = (req as AuthenticatedRequest).user?.id;
+
+      if (!user_id) {
+        res.status(401).json({
+          success: false,
+          message: 'Authentication required'
+        });
+        return;
+      }
+
+      // We might need to map or validate that bookingData matches CreateBookingDto
+      // For now assuming body has correct shape minus user_id and status
+      const booking = await this.bookingService.createBooking({
+        ...bookingData,
+        user_id,
+        status: 'pending' // Default status
+      });
+
       res.status(201).json({
         success: true,
         data: booking,
@@ -38,9 +54,9 @@ export class BookingController {
         });
         return;
       }
-      
-      const booking = await this.bookingService.getBookingWithUserAndProperty(parseInt(id));
-      
+
+      const booking = await this.bookingService.getBookingWithUserAndProperty(id);
+
       if (!booking) {
         res.status(404).json({
           success: false,
@@ -91,9 +107,9 @@ export class BookingController {
         });
         return;
       }
-      
-      const bookings = await this.bookingService.getUserBookingsWithProperties(parseInt(userId));
-      
+
+      const bookings = await this.bookingService.getUserBookingsWithProperties(userId);
+
       res.status(200).json({
         success: true,
         data: bookings.map(booking => ({
@@ -132,9 +148,9 @@ export class BookingController {
         });
         return;
       }
-      
-      const bookings = await this.bookingService.getPropertyBookingsWithUsers(parseInt(propertyId));
-      
+
+      const bookings = await this.bookingService.getPropertyBookingsWithUsers(propertyId);
+
       res.status(200).json({
         success: true,
         data: bookings.map(booking => ({
@@ -164,7 +180,7 @@ export class BookingController {
   async getAllBookingsWithDetails(_: Request, res: Response): Promise<void> {
     try {
       const bookings = await this.bookingService.getAllBookingsWithRelations();
-      
+
       res.status(200).json({
         success: true,
         data: bookings.map(booking => ({
@@ -201,7 +217,7 @@ export class BookingController {
   async getBookingsByDateRange(req: Request, res: Response): Promise<void> {
     try {
       const { startDate, endDate } = req.query;
-      
+
       if (!startDate || !endDate) {
         res.status(400).json({
           success: false,
@@ -214,7 +230,7 @@ export class BookingController {
         new Date(startDate as string),
         new Date(endDate as string)
       );
-      
+
       res.status(200).json({
         success: true,
         data: bookings,
@@ -233,7 +249,7 @@ export class BookingController {
   async getBookingStats(_: Request, res: Response): Promise<void> {
     try {
       const stats = await this.bookingService.getBookingStatsByProperty();
-      
+
       res.status(200).json({
         success: true,
         data: stats,
@@ -247,4 +263,27 @@ export class BookingController {
       });
     }
   }
-} 
+
+  async getBookingById(req: Request, res: Response): Promise<void> {
+    // Need to implement this if it was in the class but I missed copying it or if it's new
+    // It is part of IBookingService so it should be exposed
+    try {
+      const { id } = req.params;
+      if (!id) {
+        res.status(400).json({ error: 'Booking ID is required' });
+        return;
+      }
+      const booking = await this.bookingService.getBookingById(id);
+      if (!booking) {
+        res.status(404).json({ error: 'Booking not found' });
+        return;
+      }
+      res.json(booking);
+    } catch (error) {
+      res.status(500).json({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+}

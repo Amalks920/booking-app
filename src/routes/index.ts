@@ -1,9 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { userRoutes } from '../modules/users';
 import { roleRoutes } from '../modules/users';
-import { propertyRoutes } from '../modules/properties';
+import { bedRoutes, propertyRoutes } from '../modules/properties';
 import { roomRoutes } from '../modules/properties';
 import { amenityRoutes } from '../modules/properties';
+import { bookingRoutes } from '../modules/bookings';
 
 const router = Router();
 
@@ -13,6 +14,8 @@ router.use('/roles', roleRoutes);
 router.use('/properties', propertyRoutes);
 router.use('/rooms', roomRoutes);
 router.use('/amenities', amenityRoutes);
+router.use('/beds', bedRoutes);
+router.use('/bookings', bookingRoutes);
 /**
  * @swagger
  * /api/v1:

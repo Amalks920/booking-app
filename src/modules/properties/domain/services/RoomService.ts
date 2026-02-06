@@ -1,7 +1,7 @@
 import { CreateRoomDto, IRoomRepository, Room, UpdateRoomDto } from "../entities/Room";
 
 export class RoomService {
-  constructor(private roomRepository: IRoomRepository) {}
+  constructor(private roomRepository: IRoomRepository) { }
 
   async getAllRooms(): Promise<Room[]> {
     return this.roomRepository.findAll();
@@ -17,6 +17,10 @@ export class RoomService {
 
   async updateRoom(id: string, roomData: UpdateRoomDto): Promise<Room | null> {
     return this.roomRepository.update(id, roomData);
+  }
+
+  async findPrice(id: string): Promise<number> {
+    return this.roomRepository.findPrice(id);
   }
 
   async deleteRoom(id: string): Promise<boolean> {
