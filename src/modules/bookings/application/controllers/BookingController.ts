@@ -286,4 +286,39 @@ export class BookingController {
       });
     }
   }
+
+  async createOrder(req: Request, res: Response): Promise<void> {
+    try {
+      const bookingData = req.body;
+      const user_id = (req as AuthenticatedRequest).user?.id;
+
+      if (!user_id) {
+        res.status(401).json({
+          success: false,
+          message: 'Authentication required'
+        });
+        return;
+      }
+
+      // We might need to map or validate that bookingData matches CreateBookingDto
+      // For now assuming body has correct shape minus user_id and status
+      const booking = await this.bookingService.createBooking({
+        ...bookingData,
+        user_id,
+        status: 'pending' // Default status
+      });
+
+      res.status(201).json({
+        success: true,
+        data: booking,
+        message: 'Booking created successfully'
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Failed to create booking',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
 }

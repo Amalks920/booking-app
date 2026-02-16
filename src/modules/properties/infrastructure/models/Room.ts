@@ -119,7 +119,7 @@ RoomModel.init(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM('available', 'booked', 'maintenance', 'pending'),
+      type: DataTypes.ENUM('maintenance', 'pending', 'available'),
       allowNull: false,
       defaultValue: 'pending',
     },

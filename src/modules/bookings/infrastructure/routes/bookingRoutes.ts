@@ -3,6 +3,8 @@ import { BookingController } from "../../application/controllers/BookingControll
 import { BookingService } from "../../domain/services/BookingService";
 import { BookingRepositoryImpl } from "../../infrastructure/repositories/BookingRepository";
 import { authenticateUser } from "../../../../shared/middleware/authMiddleware";
+import { validateBody } from "../../../../shared/validation/validateBody";
+import { createOrderInput } from "../../application/validation/bookingSchemas";
 
 const router = Router();
 
@@ -38,6 +40,26 @@ const bookingController = new BookingController(bookingService);
  *         description: Unauthorized - Authentication required
  */
 router.post('/', authenticateUser, (req, res) => bookingController.createBooking(req, res));
+
+/**
+ * @swagger
+ * /api/v1/bookings/create-order:
+ *   post:
+ *     summary: Create an order
+ *     description: Create a payment order
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Order created successfully
+ *       501:
+ *         description: Not implemented
+ */
+router.post('/create-order', authenticateUser, validateBody(createOrderInput), (_req, res) => {
+    res.status(501).json({ message: 'Not implemented' });
+});
+
 
 /**
  * @swagger

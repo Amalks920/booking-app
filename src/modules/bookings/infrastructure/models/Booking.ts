@@ -6,7 +6,7 @@ import PropertyModel from '../../../properties/infrastructure/models/Property';
 export interface BookingAttributes {
   id: string;
   user_id: string;
-  property_id: string;
+  room_id: string;
   check_in_date: Date;
   check_out_date: Date;
   total_amount: number;
@@ -20,7 +20,7 @@ export interface BookingCreationAttributes extends Optional<BookingAttributes, '
 export class Booking extends Model<BookingAttributes, BookingCreationAttributes> implements BookingAttributes {
   public id!: string;
   public user_id!: string;
-  public property_id!: string;
+  public room_id!: string;
   public check_in_date!: Date;
   public check_out_date!: Date;
   public total_amount!: number;
@@ -44,11 +44,11 @@ Booking.init(
         key: 'id'
       }
     },
-    property_id: {
-      type: DataTypes.INTEGER,
+    room_id: {
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'properties',
+        model: 'rooms',
         key: 'id'
       }
     },
@@ -65,7 +65,7 @@ Booking.init(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM('pending', 'confirmed', 'cancelled', 'completed'),
+      type: DataTypes.ENUM('pending', 'confirmed', 'cancelled', 'failed'),
       allowNull: false,
       defaultValue: 'pending',
     },
@@ -106,6 +106,7 @@ export default Booking;
  * CHECK_OUT
  * NO_OF_ADULTS
  * NO_OF_CHILDREN
+ * ROOM_ID
  * 
  */
 

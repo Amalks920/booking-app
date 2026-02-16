@@ -34,4 +34,5 @@ export interface IBookingRepository {
   create(booking: CreateBookingDto): Promise<Booking>;
   update(id: string, booking: UpdateBookingDto): Promise<Booking | null>;
   delete(id: string): Promise<boolean>;
+  findAvailableRoom(check_in_date: string, check_out_date: string, guests: { adults: number, children: { age: number }[] }): Promise<any[]>;
 } 
